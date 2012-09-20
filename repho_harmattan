@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# start Repho with harmattan platform and GUI modules
+python repho.py -p harmattan
