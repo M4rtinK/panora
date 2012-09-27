@@ -1,3 +1,3 @@
-# RePho #
+# Panora #
 
-RePho is a flexible re-photography tool written in Python and QML.
+Panora helps to create photos for further panorama processing.
