@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# start Panora with harmattan platform and GUI modules
+python panora.py -p harmattan

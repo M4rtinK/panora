@@ -10,8 +10,8 @@ class Startup():
     parser.add_argument('-p',
                         help="specify the platform", default="pc",
                         action="store", choices=["maemo5", "harmattan", "pc"])
-    parser.add_argument('-o',
-                        help="specify path to an old photo to open", default=None,
-                        action="store", metavar="path to file",)
+    parser.add_argument('--name',
+                        help="use this project name", default=None,
+                        action="store", metavar="project name",)
     self.args = parser.parse_args()
 

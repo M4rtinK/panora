@@ -12,15 +12,15 @@ import info
 from base_platform import BasePlatform
 
 class Maemo5(BasePlatform):
-  def __init__(self, repho, GTK=True):
+  def __init__(self, panora, GTK=True):
     BasePlatform.__init__(self)
 
-    self.repho = repho
+    self.panora = panora
     self.GTK = GTK
     if GTK:
-      window = self.repho.gui.getWindow()
+      window = self.panora.gui.getWindow()
 
-      # enable zoom/volume keys for usage by repho
+      # enable zoom/volume keys for usage by panora
       self.enableZoomKeys(window)
 
       # enable rotation
@@ -44,7 +44,7 @@ class Maemo5(BasePlatform):
       historyPickerButton = self.getVerticalPickerButton("History")
       historyPickerButton.set_selector(selector)
       self.historyPickerButton = historyPickerButton
-      self.repho.watch('openMangasHistory', self._updateHistoryCB)
+      self.panora.watch('openMangasHistory', self._updateHistoryCB)
 
       optionsButton = gtk.Button("Options")
       optionsButton.connect('clicked',self._showOptionsCB)
@@ -86,7 +86,7 @@ class Maemo5(BasePlatform):
     return True
 
   def _toggleFullscreenCB(self, button):
-    self.repho.gui.toggleFullscreen()
+    self.panora.gui.toggleFullscreen()
     
   def _getHistorySelector(self):
     selector = hildon.TouchSelector()
@@ -95,7 +95,7 @@ class Maemo5(BasePlatform):
     return selector
 
 #  def _startHistorySelectorCB(self, button):
-#    picker = hildon.PickerDialog(self.repho.getWindow())
+#    picker = hildon.PickerDialog(self.panora.getWindow())
 #    selector = self._getHistorySelector()
 #    selector.connect('changed', self._historyRowSelected)
 #    picker.set_selector(selector)
@@ -106,8 +106,8 @@ class Maemo5(BasePlatform):
     also make active the last used fitting mode"""
     touchSelector = hildon.TouchSelector(text=True)
     touchSelector.set_column_selection_mode(hildon.TOUCH_SELECTOR_SELECTION_MODE_SINGLE)
-    modes = self.repho.getFittingModes()
-    lastUsedValue = self.repho.get('fitMode', None)
+    modes = self.panora.getFittingModes()
+    lastUsedValue = self.panora.get('fitMode', None)
     lastUsedValueId = None
     id = 0
     for mode in modes:
@@ -122,10 +122,10 @@ class Maemo5(BasePlatform):
   def _applyFittingModeCB(self, pickerButton):
     """handle the selector callback and set the appropriate fitting mode"""
     index = pickerButton.get_selector().get_active(0)
-    modes = self.repho.getFittingModes()
+    modes = self.panora.getFittingModes()
     try:
       (key, desc) = modes[index]
-      self.repho.set('fitMode',key)
+      self.panora.set('fitMode',key)
     except Exception, e:
       print("maemo 5: wrong fitting touch selector index", e)
 
@@ -173,7 +173,7 @@ class Maemo5(BasePlatform):
     if title:
       pb.set_title(title)
     modes = self._getRotationModes()
-    lastUsedValue = self.repho.get('rotationMode', self._getDefaultRotationMode())
+    lastUsedValue = self.panora.get('rotationMode', self._getDefaultRotationMode())
     selector = self.getSelector(modes, lastUsedValue)
     pb.set_selector(selector)
     pb.connect('value-changed', self._applyRotationCB)
@@ -215,7 +215,7 @@ class Maemo5(BasePlatform):
 
   def _actuallyDeleteItemFromHistoryCB(self, path):
     """actually remove the item from history and update it"""
-    self.repho.removeMangaFromHistory(path)
+    self.panora.removeMangaFromHistory(path)
     self._updateHistory()
 
   def _showOptionsCB(self, button):
@@ -243,9 +243,9 @@ class Maemo5(BasePlatform):
     # kinnetic scrolling
     ksLabel = gtk.Label("Scrolling")
     ksButton = self.CheckButton("Kinnetic scrolling")
-    ksButton.set_active(self.repho.get('kineticScrolling', True))
+    ksButton.set_active(self.panora.get('kineticScrolling', True))
     ksButton.connect('toggled', self._toggleOptionCB, 'kineticScrolling', False)
-    self.repho.watch('kineticScrolling', self._updateKSCB, ksButton)
+    self.panora.watch('kineticScrolling', self._updateKSCB, ksButton)
     vbox.pack_start(ksLabel, False, False, padding*2)
     vbox.pack_start(ksButton, False, False, 0)
 
@@ -263,7 +263,7 @@ class Maemo5(BasePlatform):
     # debug
     debugLabel = gtk.Label("Debug")
     debug1Button = self.CheckButton("Print page loading info")
-    debug1Button.set_active(self.repho.get('debugPageLoading', False))
+    debug1Button.set_active(self.panora.get('debugPageLoading', False))
     debug1Button.connect('toggled', self._toggleOptionCB, 'debugPageLoading', False)
     vbox.pack_start(debugLabel, False, False, padding*2)
     vbox.pack_start(debug1Button, False, False, 0)
@@ -277,8 +277,8 @@ class Maemo5(BasePlatform):
     win.show_all()
 
   def _toggleOptionCB(self, button, key, default):
-    old = self.repho.get(key, default)
-    self.repho.set(key, not old)
+    old = self.panora.get(key, default)
+    self.panora.set(key, not old)
 
   def _updateKSCB(self, key, oldValue, newValue, button):
     button.set_active(newValue)
@@ -303,7 +303,7 @@ class Maemo5(BasePlatform):
     # add shortcuts tab
     notebook.append_page(pann,self._getLabel("Shortcuts",enlargeTabs))
     # add stats tab
-    notebook.append_page(info.getStatsContent(self.repho),self._getLabel("Stats", enlargeTabs))
+    notebook.append_page(info.getStatsContent(self.panora),self._getLabel("Stats", enlargeTabs))
     # add about tab
     notebook.append_page(info.getAboutContent(versionString),self._getLabel("About", enlargeTabs))
 
@@ -348,9 +348,9 @@ class Maemo5(BasePlatform):
           state = self.currentHistory[id]['state']
           path = state['path']
           print "path selected: %s" % path
-          activeMangaPath = self.repho.getActiveMangaPath()
+          activeMangaPath = self.panora.getActiveMangaPath()
           if path != activeMangaPath: # infinite loop defence
-            self.repho.openMangaFromState(state)
+            self.panora.openMangaFromState(state)
       except Exception, e:
         print "error while restoring manga from history"
         print e
@@ -364,7 +364,7 @@ class Maemo5(BasePlatform):
     primitive locking
     """
     self.historyLocked = True
-    sortedHistory = self.repho.getSortedHistory()
+    sortedHistory = self.panora.getSortedHistory()
     if sortedHistory:
       self.historyStore.clear()
       for item in sortedHistory:
@@ -383,7 +383,7 @@ class Maemo5(BasePlatform):
 
   def _clearHistory(self):
     print "clearing history"
-    self.repho.clearHistory()
+    self.panora.clearHistory()
     self.historyLocked = True
     self.historyStore.clear()
     self.historyLocked = False
@@ -398,8 +398,8 @@ class Maemo5(BasePlatform):
     else: # type == "file"
       t = gtk.FILE_CHOOSER_ACTION_OPEN
 
-    dialog = hildon.FileChooserDialog(self.repho.gui.getWindow(), t)
-    lastFolder = self.repho.get('lastChooserFolder', None)
+    dialog = hildon.FileChooserDialog(self.panora.gui.getWindow(), t)
+    lastFolder = self.panora.get('lastChooserFolder', None)
     currentFolder = None
     selectedPath = None
     if lastFolder:
@@ -411,16 +411,16 @@ class Maemo5(BasePlatform):
       selectedPath = dialog.get_filename()
     dialog.destroy()
     if currentFolder != None:
-      self.repho.set('lastChooserFolder', currentFolder)
+      self.panora.set('lastChooserFolder', currentFolder)
     if selectedPath:
-      self.repho.openManga(selectedPath)
+      self.panora.openManga(selectedPath)
 
   def notify(self, message, icon=None):
     if self.GTK:
       print message
-      hildon.hildon_banner_show_information_with_markup(self.repho.gui.getWindow(), "icon_text", message)
+      hildon.hildon_banner_show_information_with_markup(self.panora.gui.getWindow(), "icon_text", message)
     else:
-      self.repho.gui._notify(message, icon)
+      self.panora.gui._notify(message, icon)
 
   def pagingDialogBeforeOpen(self):
     """notify the user that the window in tha background does not live-update"""
@@ -440,10 +440,10 @@ class Maemo5(BasePlatform):
 
   def _startAutorotation(self):
     """start the GUI autorotation feature"""
-    rotationMode = self.repho.get('rotationMode', self._getDefaultRotationMode()) # get last used mode
+    rotationMode = self.panora.get('rotationMode', self._getDefaultRotationMode()) # get last used mode
     lastModeNumber = self._getRotationModeNumber(rotationMode) # get last used mode number
-    applicationName = "repho"
-    rObject = maemo5_autorotation.FremantleRotation(applicationName, main_window=self.repho.gui.getWindow(), mode=lastModeNumber)
+    applicationName = "panora"
+    rObject = maemo5_autorotation.FremantleRotation(applicationName, main_window=self.panora.gui.getWindow(), mode=lastModeNumber)
     return rObject
 
   def _setRotationMode(self, rotationMode):
@@ -472,7 +472,7 @@ class Maemo5(BasePlatform):
   def areYouSure(self, text, okCB=None, cancelCB=None):
     """create a confirmation dialog with optional callbacks"""
     
-    note = hildon.Note("confirmation", self.repho.getWindow(), text)
+    note = hildon.Note("confirmation", self.panora.getWindow(), text)
 
     retcode = gtk.Dialog.run(note)
     note.destroy()

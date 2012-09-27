@@ -5,9 +5,9 @@ import gtk
 from base_platform import BasePlatform
 
 class PC(BasePlatform):
-  def __init__(self, repho):
+  def __init__(self, panora):
     BasePlatform.__init__(self)
-    self.repho = repho
+    self.panora = panora
     self.mb = self._addMenu()
 
   def hasPagingKeys(self):
@@ -21,8 +21,8 @@ class PC(BasePlatform):
       t = gtk.FILE_CHOOSER_ACTION_OPEN
 
     buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OPEN,gtk.RESPONSE_OK)
-    dialog = gtk.FileChooserDialog("Open file",self.repho.window, t, buttons=buttons)
-    lastFolder = self.repho.get('lastChooserFolder', None)
+    dialog = gtk.FileChooserDialog("Open file",self.panora.window, t, buttons=buttons)
+    lastFolder = self.panora.get('lastChooserFolder', None)
     currentFolder = None
     selectedPath = None
     if lastFolder:
@@ -34,10 +34,10 @@ class PC(BasePlatform):
       selectedPath = dialog.get_filename()
     dialog.destroy()
     if currentFolder != None:
-      self.repho.set('lastChooserFolder', currentFolder)
+      self.panora.set('lastChooserFolder', currentFolder)
     if selectedPath:
       print "open"
-      self.repho.openManga(selectedPath)
+      self.panora.openManga(selectedPath)
 
   def startChooserCB(self, button, type):
     self.startChooser(type)
@@ -45,10 +45,10 @@ class PC(BasePlatform):
   def _addMenu(self):
     """add main menu"""
 
-    if self.repho.gui.getToolkit() == "GTK":
+    if self.panora.gui.getToolkit() == "GTK":
       print "ADASDADASDASDASD"
-      mvbox = self.repho.gui.getVbox()
-      window = self.repho.gui.getWindow()
+      mvbox = self.panora.gui.getVbox()
+      window = self.panora.gui.getWindow()
       mb = gtk.MenuBar()
       filemenu = gtk.Menu()
       filem = gtk.MenuItem("_File")
@@ -103,7 +103,7 @@ class PC(BasePlatform):
 
   def minimize(self):
     """minimize the main window"""
-    self.repho.getWindow().iconify()
+    self.panora.getWindow().iconify()
 
 
 

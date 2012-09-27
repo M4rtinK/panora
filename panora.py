@@ -104,7 +104,16 @@ class RePho:
 
   def getWindow(self):
     return self.window
-
+  
+  def getName(self):
+    return "panora"
+  
+  def getPrettyName(self):
+    return "Panora"
+  
+  def getProfileFolderName(self):
+    return ".%s" % self.getName()
+    
   def notify(self, message, icon=""):
     print "notification: %s" % message
     self.platform.notify(message,icon)

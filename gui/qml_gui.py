@@ -22,8 +22,8 @@ def newlines2brs(text):
   return re.sub('\n', '<br>', text)
 
 class QMLGUI(gui.GUI):
-  def __init__(self, repho, type, size=(854,480)):
-    self.repho = repho
+  def __init__(self, panora, type, size=(854,480)):
+    self.panora = panora
 
     self.activePage = None
 
@@ -35,7 +35,7 @@ class QMLGUI(gui.GUI):
         
       def closeEvent(self, event):
         print "shutting down"
-        self.gui.repho.destroy()
+        self.gui.panora.destroy()
 
     self.app = QApplication(sys.argv)
     self.view = ModifiedQDeclarativeView(self)
@@ -55,19 +55,19 @@ class QMLGUI(gui.GUI):
     self.view.engine().addImageProvider("icons",self.iconProvider)
     rc = self.view.rootContext()
     # make the main context accessible from QML
-    rc.setContextProperty("repho", Repho(self))
+    rc.setContextProperty("panora", Repho(self))
     # make options accessible from QML
-    options = Options(self.repho)
+    options = Options(self.panora)
     rc.setContextProperty("options", options)
     # make platform module accessible from QML
-    platform = Platform(self.repho)
+    platform = Platform(self.panora)
     rc.setContextProperty("platform", platform)
 
 #    # ** history list handling **
 #    # get the objects and wrap them
-#    historyListController = HistoryListController(self.repho)
+#    historyListController = HistoryListController(self.panora)
 #    self.historyList = []
-#    self.historyListModel = HistoryListModel(self.repho, self.historyList)
+#    self.historyListModel = HistoryListModel(self.panora, self.historyList)
 #    # make available from QML
 #    rc.setContextProperty('historyListController', historyListController)
 #    rc.setContextProperty('historyListModel', self.historyListModel)
@@ -92,7 +92,7 @@ class QMLGUI(gui.GUI):
     self.toggleFullscreen()
 
     # check if first start dialog has to be shown
-    if self.repho.get("QMLShowFirstStartDialog", True):
+    if self.panora.get("QMLShowFirstStartDialog", True):
       self.rootObject.openFirstStartDialog()
 
 #  def resize(self, w, h):
@@ -127,7 +127,7 @@ class QMLGUI(gui.GUI):
 
   def _qtWindowClosed(self, event):
     print('qt window closing down')
-    self.repho.destroy()
+    self.panora.destroy()
 
   def stopMainLoop(self):
     """stop the main loop or its equivalent"""
@@ -166,7 +166,7 @@ class QMLGUI(gui.GUI):
 #    gobject.idle_add(callback, *args)
 #
 #  def _destroyCB(self, window):
-#    self.repho.destroy()
+#    self.panora.destroy()
 
 class MangaPageImageProvider(QDeclarativeImageProvider):
   """the MangaPageImageProvider class provides manga pages to the QML layer"""
@@ -207,13 +207,13 @@ class Repho(QObject):
   def __init__(self, gui):
     QObject.__init__(self)
     self.gui = gui
-    self.repho = gui.repho
+    self.panora = gui.panora
     self.currentFolder = None
     self.oldImageFilename = None
 
   @QtCore.Slot(result=str)
   def next(self):
-    activeManga = self.gui.repho.getActiveManga()
+    activeManga = self.gui.panora.getActiveManga()
     if activeManga:
       path = activeManga.getPath()
       idValid, id = activeManga.next()
@@ -226,7 +226,7 @@ class Repho(QObject):
 
   @QtCore.Slot(result=str)
   def previous(self):
-    activeManga = self.gui.repho.getActiveManga()
+    activeManga = self.gui.panora.getActiveManga()
     if activeManga:
       path = activeManga.getPath()
       idValid, id = activeManga.previous()
@@ -239,7 +239,7 @@ class Repho(QObject):
 
   @QtCore.Slot(result=str)
   def getPrettyName(self):
-    activeManga = self.gui.repho.getActiveManga()
+    activeManga = self.gui.panora.getActiveManga()
     if activeManga:
       return activeManga.getPrettyName()
     else:
@@ -267,9 +267,9 @@ class Repho(QObject):
     path = re.sub('file://', '', path, 1)
     folder = os.path.dirname(path)
     filename = os.path.basename(path)
-    self.repho.set('lastChooserFolder', folder)
+    self.panora.set('lastChooserFolder', folder)
     #TODO: check if it is an image before saving
-    self.repho.set('lastFile', path)
+    self.panora.set('lastFile', path)
     self.currentFolder = folder
     self.oldImageFilename = filename
 
@@ -284,8 +284,8 @@ class Repho(QObject):
 
   @QtCore.Slot(result=str)
   def getSavedFileSelectorPath(self):
-    defaultPath = self.repho.platform.getDefaultFileSelectorPath()
-    lastFolder = self.repho.get('lastChooserFolder', defaultPath)
+    defaultPath = self.panora.platform.getDefaultFileSelectorPath()
+    lastFolder = self.panora.get('lastChooserFolder', defaultPath)
     return lastFolder
 
   @QtCore.Slot(str,result=str)
@@ -358,7 +358,7 @@ class Repho(QObject):
   @QtCore.Slot(result=str)
   def getSavedFilePath(self):
     defaultPath = ""
-    lastFilePath = self.repho.get('lastFile', defaultPath)
+    lastFilePath = self.panora.get('lastFile', defaultPath)
     return lastFilePath
 
   @QtCore.Slot(result=str)
@@ -377,7 +377,7 @@ class Repho(QObject):
     """the history list model needs to be updated only before the list
     is actually shown, no need to update it dynamically every time a manga is added
     to history"""
-    mangaStateObjects = [MangaStateWrapper(state) for state in self.gui.repho.getSortedHistory()]
+    mangaStateObjects = [MangaStateWrapper(state) for state in self.gui.panora.getSortedHistory()]
     self.gui.historyListModel.setThings(mangaStateObjects)
     self.gui.historyListModel.reset()
 
@@ -387,12 +387,12 @@ class Repho(QObject):
     """the history list model needs to be updated only before the list
     is actually shown, no need to update it dynamically every time a manga is added
     to history"""
-    self.gui.repho.clearHistory()
+    self.gui.panora.clearHistory()
 
   @QtCore.Slot(result=float)
   def getActiveMangaScale(self):
     """return the saved scale of the currently active manga"""
-    activeManga = self.repho.getActiveManga()
+    activeManga = self.panora.getActiveManga()
     if activeManga:
       return activeManga.getScale()
     else:
@@ -401,8 +401,8 @@ class Repho(QObject):
   @QtCore.Slot(result=float)
   def getActiveMangaShiftX(self):
     """return the saved X shift of the currently active manga"""
-    activeManga = self.repho.getActiveManga()
-    print self.repho.getActiveManga()
+    activeManga = self.panora.getActiveManga()
+    print self.panora.getActiveManga()
     if activeManga:
       return activeManga.getShiftX()
     else:
@@ -411,7 +411,7 @@ class Repho(QObject):
   @QtCore.Slot(result=float)
   def getActiveMangaShiftY(self):
     """return the saved Y shift of the currently active manga"""
-    activeManga = self.repho.getActiveManga()
+    activeManga = self.panora.getActiveManga()
     if activeManga:
       return activeManga.getShiftY()
     else:
@@ -419,8 +419,8 @@ class Repho(QObject):
 
   @QtCore.Slot()
   def quit(self):
-    """shut down repho"""
-    self.gui.repho.destroy()
+    """shut down panora"""
+    self.gui.panora.destroy()
 
 
 class Stats(QtCore.QObject):
@@ -431,7 +431,7 @@ class Stats(QtCore.QObject):
 
   @QtCore.Slot(bool)
   def setOn(self, ON):
-    self.repho.stats.setOn(ON)
+    self.panora.stats.setOn(ON)
 
   @QtCore.Slot()
   def reset(self):
@@ -470,13 +470,13 @@ class Stats(QtCore.QObject):
 
 class Platform(QtCore.QObject):
   """make stats available to QML and integrable as a property"""
-  def __init__(self, repho):
+  def __init__(self, panora):
     QtCore.QObject.__init__(self)
-    self.repho = repho
+    self.panora = panora
 
   @QtCore.Slot()
   def minimise(self):
-    return self.repho.platform.minimise()
+    return self.panora.platform.minimise()
 
   @QtCore.Slot(result=bool)
   def showMinimiseButton(self):
@@ -484,7 +484,7 @@ class Platform(QtCore.QObject):
     Harmattan handles this by the Swype UI and
     on PC this should be handled by window decorator
     """
-    return self.repho.platform.showMinimiseButton()
+    return self.panora.platform.showMinimiseButton()
 
   @QtCore.Slot(result=bool)
   def showQuitButton(self):
@@ -492,7 +492,7 @@ class Platform(QtCore.QObject):
     Harmattan handles this by the Swype UI and
     on PC it is a custom to have the quit action in the main menu
     """
-    return self.repho.platform.showQuitButton()
+    return self.panora.platform.showQuitButton()
 
   @QtCore.Slot(result=bool)
   def incompleteTheme(self):
@@ -501,13 +501,13 @@ class Platform(QtCore.QObject):
     Hopefully, this can be removed once the themes are in better shape.
     """
     # the Fremantle theme is incomplete
-    return self.repho.platform.getIDString() == "maemo5"
+    return self.panora.platform.getIDString() == "maemo5"
 
 class Options(QtCore.QObject):
   """make options available to QML and integrable as a property"""
-  def __init__(self, repho):
+  def __init__(self, panora):
       QtCore.QObject.__init__(self)
-      self.repho = repho
+      self.panora = panora
 
   """ like this, the function can accept
   and return different types to and from QML
@@ -522,8 +522,8 @@ class Options(QtCore.QObject):
   def get(self, key, default):
     """get a value from Rephos persistent options dictionary"""
     print "GET"
-    print key, default, self.repho.get(key, default)
-    return self.repho.get(key, default)
+    print key, default, self.panora.get(key, default)
+    return self.panora.get(key, default)
 
 
   @QtCore.Slot(str, bool)
@@ -534,7 +534,7 @@ class Options(QtCore.QObject):
     """set a keys value in Rephos persistent options dictionary"""
     print "SET"
     print key, value
-    return self.repho.set(key, value)
+    return self.panora.set(key, value)
 
   # for old PySide versions that don't support multiple
   # function decorations
@@ -542,50 +542,50 @@ class Options(QtCore.QObject):
   @QtCore.Slot(str, bool, result=bool)
   def getB(self, key, default):
     print "GET"
-    print key, default, self.repho.get(key, default)
-    return self.repho.get(key, default)
+    print key, default, self.panora.get(key, default)
+    return self.panora.get(key, default)
 
   @QtCore.Slot(str, str, result=str)
   def getS(self, key, default):
     print "GET"
-    print key, default, self.repho.get(key, default)
-    return self.repho.get(key, default)
+    print key, default, self.panora.get(key, default)
+    return self.panora.get(key, default)
 
   @QtCore.Slot(str, int, result=int)
   def getI(self, key, default):
     print "GET"
-    print key, default, self.repho.get(key, default)
-    return self.repho.get(key, default)
+    print key, default, self.panora.get(key, default)
+    return self.panora.get(key, default)
 
   @QtCore.Slot(str, float, result=float)
   def getF(self, key, default):
     print "GET"
-    print key, default, self.repho.get(key, default)
-    return self.repho.get(key, default)
+    print key, default, self.panora.get(key, default)
+    return self.panora.get(key, default)
 
   @QtCore.Slot(str, bool)
   def setB(self, key, value):
     print "SET"
     print key, value
-    return self.repho.set(key, value)
+    return self.panora.set(key, value)
 
   @QtCore.Slot(str, str)
   def setS(self, key, value):
     print "SET"
     print key, value
-    return self.repho.set(key, value)
+    return self.panora.set(key, value)
 
   @QtCore.Slot(str, int)
   def setI(self, key, value):
     print "SET"
     print key, value
-    return self.repho.set(key, value)
+    return self.panora.set(key, value)
 
   @QtCore.Slot(str, float)
   def setF(self, key, value):
     print "SET"
     print key, value
-    return self.repho.set(key, value)
+    return self.panora.set(key, value)
 
 
 
@@ -627,9 +627,9 @@ class MangaStateWrapper(QtCore.QObject):
 class HistoryListModel(QtCore.QAbstractListModel):
   COLUMNS = ('thing',)
 
-  def __init__(self, repho, things):
+  def __init__(self, panora, things):
     QtCore.QAbstractListModel.__init__(self)
-    self.repho = repho
+    self.panora = panora
     self._things = things
     self.setRoleNames(dict(enumerate(HistoryListModel.COLUMNS)))
 
@@ -661,19 +661,19 @@ class HistoryListModel(QtCore.QAbstractListModel):
     for state in checked:
       paths.append(state.path)
     print paths
-    self.repho.removeMangasFromHistory(paths)
+    self.panora.removeMangasFromHistory(paths)
     # quick and dirty remove
     for state in checked:
       self._things.remove(state)
 
 class HistoryListController(QtCore.QObject):
-  def __init__(self, repho):
+  def __init__(self, panora):
     QtCore.QObject.__init__(self)
-    self.repho = repho
+    self.panora = panora
         
   @QtCore.Slot(QtCore.QObject)
   def thingSelected(self, wrapper):
-    self.repho.openMangaFromState(wrapper.state)
+    self.panora.openMangaFromState(wrapper.state)
 
   @QtCore.Slot(QtCore.QObject, QtCore.QObject)
   def toggled(self, model, wrapper):

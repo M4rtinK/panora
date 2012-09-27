@@ -5,15 +5,15 @@ Repho hildon UI (for Maemo 5@N900)
 from base_platform import BasePlatform
 
 class Harmattan(BasePlatform):
-  def __init__(self, repho):
+  def __init__(self, panora):
     BasePlatform.__init__(self)
-    self.repho = repho
+    self.panora = panora
 
   def getIDString(self):
     return "harmattan"
 
   def notify(self, message, icon=""):
-    self.repho.gui._notify(message, icon)
+    self.panora.gui._notify(message, icon)
 
   def getDefaultFileSelectorPath(self):
     """we default to the MyDocs folder as this is where most

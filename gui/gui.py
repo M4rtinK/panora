@@ -1,8 +1,8 @@
 """a GUI chooser"""
 
 class GUI:
-  def __init__(self, repho):
-    self.repho = repho
+  def __init__(self, panora):
+    self.panora = panora
 
   def resize(self, w, h):
     """resize the GUI to given width and height"""
@@ -89,10 +89,10 @@ class GUI:
     return None
 
   def _destroyed(self):
-    self.repho.destroy()
+    self.panora.destroy()
 
   def _keyPressed(self, keyName):
-    self.repho.keyPressed(keyName)
+    self.panora.keyPressed(keyName)
 
 
 def getGui(repho, type="gtk",accel=True, size=(800,480)):

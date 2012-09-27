@@ -3,12 +3,13 @@ import marshal
 import os
 
 class Options:
-  def __init__(self, repho):
-    self.repho = repho
-    optionsFilename = 'repho_options.bin'
-    rephoProfileFolderName = '.repho'
+  def __init__(self, panora):
+    self.panora = panora
+    name = self.panora.getName()
+    optionsFilename = '%s_options.bin' % name
+    profileFolderName = self.repho.getProfileFolderName()
     userHomePath = os.getenv("HOME")
-    self.profileFolderPath = os.path.join(userHomePath, rephoProfileFolderName)
+    self.profileFolderPath = os.path.join(userHomePath, profileFolderName)
     self.optionsPath = os.path.join(self.profileFolderPath, optionsFilename)
     self.checkProfilePath()
     print "options: profile path: %s" % self.profileFolderPath
@@ -31,7 +32,7 @@ class Options:
 #    print "options: saving options"
     try:
       f = open(self.optionsPath, "w")
-      marshal.dump(self.repho.getDict(), f)
+      marshal.dump(self.panora.getDict(), f)
       f.close()
 #      print "options: successfully saved"
     except Exception, e:
@@ -42,9 +43,9 @@ class Options:
       f = open(self.optionsPath, "r")
       loadedData = marshal.load(f)
       f.close()
-      self.repho.setDict(loadedData)
+      self.panora.setDict(loadedData)
     except Exception, e:
-      self.repho.setDict({})
+      self.panora.setDict({})
       print "options: exception while loading saved options:\n%s" % e
 
 
