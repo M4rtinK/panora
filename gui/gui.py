@@ -95,15 +95,15 @@ class GUI:
     self.panora.keyPressed(keyName)
 
 
-def getGui(repho, type="gtk",accel=True, size=(800,480)):
+def getGui(panora, type="gtk",accel=True, size=(800,480)):
   """return a GUI object"""
   if type=="gtk" and accel:
     import cluttergtk
     import clutter_gui
-    return clutter_gui.ClutterGTKGUI(repho, type, size)
+    return clutter_gui.ClutterGTKGUI(panora, type, size)
   elif type=="QML" and accel:
     import qml_gui
-    return qml_gui.QMLGUI(repho, type, size)
+    return qml_gui.QMLGUI(panora, type, size)
 
 
 

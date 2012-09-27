@@ -44,7 +44,7 @@ Page {
 
     Label {
         visible : imagePreview.visible
-        text : repho.getCurrentFileName()
+        text : panora.getCurrentFileName()
         color : "white"
         font.pixelSize : 32
         horizontalAlignment : Text.AlignHCenter

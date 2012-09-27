@@ -1,4 +1,4 @@
-"""a QML GUI module for Repho"""
+"""a QML GUI module for Panora"""
 import glob
 import shutil
 
@@ -55,7 +55,7 @@ class QMLGUI(gui.GUI):
     self.view.engine().addImageProvider("icons",self.iconProvider)
     rc = self.view.rootContext()
     # make the main context accessible from QML
-    rc.setContextProperty("panora", Repho(self))
+    rc.setContextProperty("panora", Panora(self))
     # make options accessible from QML
     options = Options(self.panora)
     rc.setContextProperty("options", options)
@@ -203,7 +203,7 @@ class IconImageProvider(QDeclarativeImageProvider):
     except Exception, e:
       print("loading icon failed", e)
 
-class Repho(QObject):
+class Panora(QObject):
   def __init__(self, gui):
     QObject.__init__(self)
     self.gui = gui

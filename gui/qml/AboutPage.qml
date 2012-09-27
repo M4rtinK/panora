@@ -13,22 +13,22 @@ Page {
     Label {
         id : aboutTitle
         anchors.horizontalCenter : parent.horizontalCenter
-        text: "<b>RePho</b>" + " " + repho.getVersionString()
+        text: "<b>Panora</b>" + " " + panora.getVersionString()
         //font.pointSize: 24
     }
     Image {
-        id : aboutRephoIcon
+        id : aboutPanoraIcon
         anchors.horizontalCenter : parent.horizontalCenter
         anchors.topMargin : 10
         anchors.top : aboutTitle.bottom
-        source : "image://icons/repho.svg"
+        source : "image://icons/panora.svg"
     }
     Label {
         id : aboutContactInfo
         anchors.horizontalCenter : parent.horizontalCenter
         //anchors.topMargin : 10
-        anchors.top : aboutRephoIcon.bottom
-        text: "<style type='text/css'>p { margin-bottom:15px; margin-top:0px; }</style>" + repho.getAboutText()
+        anchors.top : aboutPanoraIcon.bottom
+        text: "<style type='text/css'>p { margin-bottom:15px; margin-top:0px; }</style>" + panora.getAboutText()
 
         onLinkActivated : {
             console.log('about text link clicked: ' + link)
@@ -43,7 +43,7 @@ Page {
         anchors.top : aboutContactInfo.bottom
         onClicked : {
             console.log('donation button clicked')
-            Qt.openUrlExternally('https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=martin%2ekolman%40gmail%2ecom&lc=US&item_name=RePho%20project&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted')
+            Qt.openUrlExternally('https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=martin%2ekolman%40gmail%2ecom&lc=US&item_name=Panora%20project&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted')
         }
     }
 

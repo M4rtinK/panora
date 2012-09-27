@@ -7,7 +7,7 @@ import timer
 import time
 from threading import RLock
 
-# RePho modules import
+# Panora modules import
 startTs = timer.start()
 import options
 import startup
@@ -15,8 +15,8 @@ timer.elapsed(startTs, "All modules combined")
 
 # set current directory to the directory
 # of this file
-# like this, RePho can be run from absolute path
-# eq.: ./opt/repho/repho.py -p harmattan -u harmattan
+# like this, Panora can be run from absolute path
+# eq.: ./opt/panora/panora.py -p harmattan -u harmattan
 import os
 abspath = os.path.abspath(__file__)
 dname = os.path.dirname(abspath)
@@ -26,11 +26,11 @@ os.chdir(dname)
 import sys
 sys.path.append('platforms')
 
-class RePho:
+class Panora:
 
   def destroy(self):
     self.options.save()
-    print "repho quiting"
+    print "panora quiting"
     self.gui.stopMainLoop()
 
   def __init__(self):
@@ -75,7 +75,7 @@ class RePho:
     # create the GUI
     startTs1 = timer.start()
 
-    # RePho currently has only a single GUI module
+    # Panora currently has only a single QML based GUI module
     self.gui = gui.getGui(self, 'QML', accel=True, size=initialSize)
 
     timer.elapsed(startTs1, "GUI module import")
@@ -184,12 +184,7 @@ class RePho:
     return modes
 
 if __name__ == "__main__":
-  #os.chdir("/home/user/software/repho")
-  #sys.path.append("/home/user/software/repho")
-  #from modrana import ModRana
-  #from repho import RePho as RP
-  repho = RePho()
-  #repho = RP()
-  #subprocess.call(["/home/user/software/repho/repho.py", "-p", "harmattan"])
+  panora = Panora()
+
 
 

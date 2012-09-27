@@ -1,10 +1,10 @@
-"""a Repho information providing module"""
+"""a Panora information providing module"""
 
 import os
 
 def getAboutText(forum="meego"):
   text= "<p><b>main developer:</b> Martin Kolman</p>"
-  text+= '<p><b>email</b>: <a href="mailto:panora.info@gmail.com">repho.info@gmail.com</a></p>'
+  text+= '<p><b>email</b>: <a href="mailto:panora.info@gmail.com">panora.info@gmail.com</a></p>'
   text+= '<p><b>Jabber</b>: m4rtink@jabbim.cz</p>'
   text+= '<p><b>www</b>:  <a href="https://github.com/M4rtinK/panora">https://github.com/M4rtinK/panora</a></p>'
 

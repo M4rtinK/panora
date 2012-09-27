@@ -45,7 +45,7 @@ PageStackWindow {
 
     function openImageFile(path) {
         prepareForNewImage()
-        repho.fileOpened(path)
+        panora.fileOpened(path)
         oldImageURL = path
     }
 
@@ -59,7 +59,7 @@ PageStackWindow {
     function openUrl(url) {
         prepareForNewImage()
         // store url downloads in pictures by default
-        repho.urlOpened(url)
+        panora.urlOpened(url)
         oldImageURL = url
     }
 
@@ -125,8 +125,8 @@ PageStackWindow {
 
     QueryDialog {
         id : firstStartDialog
-        icon : "image://icons/repho.svg"
-        titleText : "How to use repho"
+        icon : "image://icons/panora.svg"
+        titleText : "How to use Panora"
         message : "<b>Open</b> an <b>old image</b>.<br>"
               +"Take a picture <b>of the place on the image</b>.<br>"
               +"Compare the <b>old image</b> with the <b>new one</b>."

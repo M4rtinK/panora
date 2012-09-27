@@ -112,7 +112,7 @@ Page {
     QueryDialog {
         id : eraseHistoryDialog
         titleText : "Erase history ?"
-        message : "Do you want to erase the history of all mangas and comic books opened by Repho ?"
+        message : "Do you want to erase the history of all mangas and comic books opened by Panora ?"
         acceptButtonText : "erase"
         rejectButtonText : "cancel"
         onAccepted : {

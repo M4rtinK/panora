@@ -181,10 +181,10 @@ Page {
             console.log("image saved")
             var storagePath
             if (oView.newIsOld) {
-                repho.storeNewAsOld(capturedImagePath)
+                panora.storeNewAsOld(capturedImagePath)
                 oView.newIsOld = false
             } else {
-                storagePath = repho.storeImage(capturedImagePath)
+                storagePath = panora.storeImage(capturedImagePath)
                 captureList.append({"path":storagePath})
             }
         }

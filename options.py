@@ -1,4 +1,4 @@
-"""Repho persistent options storage"""
+"""Panora persistent options storage"""
 import marshal
 import os
 
@@ -7,7 +7,7 @@ class Options:
     self.panora = panora
     name = self.panora.getName()
     optionsFilename = '%s_options.bin' % name
-    profileFolderName = self.repho.getProfileFolderName()
+    profileFolderName = self.panora.getProfileFolderName()
     userHomePath = os.getenv("HOME")
     self.profileFolderPath = os.path.join(userHomePath, profileFolderName)
     self.optionsPath = os.path.join(self.profileFolderPath, optionsFilename)

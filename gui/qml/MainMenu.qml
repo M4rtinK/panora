@@ -15,8 +15,8 @@ Menu {
             text : "Open from file"
             onClicked : {
                 console.log("Opening file selector")
-                console.log(repho.getSavedFileSelectorPath())
-                fileSelector.down(repho.getSavedFileSelectorPath());
+                console.log(panora.getSavedFileSelectorPath())
+                fileSelector.down(panora.getSavedFileSelectorPath());
                 //fileSelector.down("/home/user/MyDocs");
                 fileSelector.open();
             }
