@@ -1,5 +1,5 @@
 """
-Repho hildon UI (for Maemo 5@N900)
+Panora Harmattan UI (for Maemo 5@N900)
 """
 
 from base_platform import BasePlatform

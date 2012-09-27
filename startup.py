@@ -1,4 +1,4 @@
-"""args.py a repho CLI processor
+"""args.py a Panora CLI processor
 - it gets the commandline arguments and decides what to do
 """
 #noinspection PyCompatibility

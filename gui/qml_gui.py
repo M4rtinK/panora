@@ -291,7 +291,7 @@ class Panora(QObject):
   @QtCore.Slot(str,result=str)
   def storeNewAsOld(self, capturedImagePath):
     """
-    store an image captured by RePho
+    store an image captured by Panora
     as if it was a normally loaded "old" image
 
     * move it from the camera capture file
@@ -330,7 +330,7 @@ class Panora(QObject):
 
 #    dateString = str(today.year) + month + day
     dateString = str(int(time.time()))
-    newFilename = "%s_repho_%s.jpg" % (self.oldImageFilename, dateString)
+    newFilename = "%s_panora_%s.jpg" % (self.oldImageFilename, dateString)
 
 #    list = glob.glob(os.path.join(self.currentFolder,"%s*" % newFilename))
 #    print list
@@ -520,7 +520,7 @@ class Options(QtCore.QObject):
   @QtCore.Slot(str, str, result=str)
   @QtCore.Slot(str, float, result=float)
   def get(self, key, default):
-    """get a value from Rephos persistent options dictionary"""
+    """get a value from Panoras persistent options dictionary"""
     print "GET"
     print key, default, self.panora.get(key, default)
     return self.panora.get(key, default)
@@ -531,7 +531,7 @@ class Options(QtCore.QObject):
   @QtCore.Slot(str, str)
   @QtCore.Slot(str, float)
   def set(self, key, value):
-    """set a keys value in Rephos persistent options dictionary"""
+    """set a keys value in Panoras persistent options dictionary"""
     print "SET"
     print key, value
     return self.panora.set(key, value)

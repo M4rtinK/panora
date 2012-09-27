@@ -1,4 +1,4 @@
-"""various miscellaneous utility functions for Repho"""
+"""various miscellaneous utility functions for Panora"""
 
 class Point:
     def __init__(self, x, y):
