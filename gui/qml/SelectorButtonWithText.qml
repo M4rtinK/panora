@@ -1,4 +1,5 @@
-//LineText
+//SelectorButtonWithText.qml
+import Qt 4.7
 import QtQuick 1.1
 import com.nokia.meego 1.0
 
@@ -11,6 +12,7 @@ Item {
     property alias text : label.text
     property alias buttonText : pfsButton.text
     property alias iconSource : pfsButton.iconSource
+    property alias enabled : pfsButton.enabled
     property Item selector
 
     Label {
@@ -26,7 +28,7 @@ Item {
 
     Button {
         id : pfsButton
-        iconSource : "image://theme/icon-m-common-expand"
+        iconSource : "image://theme/icon-m-common-combobox-arrow"
         width : 200
         anchors {
             right: parent.right

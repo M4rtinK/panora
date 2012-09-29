@@ -1,3 +1,5 @@
+//FileSelector.qml
+import Qt 4.7
 import QtQuick 1.0
 import com.nokia.meego 1.0
 import Qt.labs.folderlistmodel 1.0
@@ -9,7 +11,7 @@ Dialog {
 
   property variant filterList: [ "*" ]
 
-  property string titleText: "File Selector"
+  property string titleText: qsTr("File Selector")
   property variant folderModel: folderModel1
   property variant view: view1
   property string selectedFile: "";
@@ -358,4 +360,3 @@ Dialog {
     }
   }
 }
-
