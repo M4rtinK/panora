@@ -46,7 +46,6 @@ class QMLGUI(gui.GUI):
     self.window.resize(*size)
     self.window.setCentralWidget(self.view)
     self.view.setResizeMode(QDeclarativeView.SizeRootObjectToView)
-#    self.view.setResizeMode(QDeclarativeView.SizeViewToRootObject)
 
     # add image providers
 #    self.pageProvider = MangaPageImageProvider(self)
@@ -63,28 +62,19 @@ class QMLGUI(gui.GUI):
     platform = Platform(self.panora)
     rc.setContextProperty("platform", platform)
 
-#    # ** history list handling **
-#    # get the objects and wrap them
-#    historyListController = HistoryListController(self.panora)
-#    self.historyList = []
-#    self.historyListModel = HistoryListModel(self.panora, self.historyList)
-#    # make available from QML
-#    rc.setContextProperty('historyListController', historyListController)
-#    rc.setContextProperty('historyListModel', self.historyListModel)
-
-
-    # Create an URL to the QML file
-    print "QT VERSION"
-    print QtCore.__version_info__
-    if QtCore.__version_info__ >= (4,7,4):
-      # use QtQuick 1.1
-      url = QUrl('gui/qml/main.qml')
+    # activate translation
+    translator = QtCore.QTranslator(self.app)
+    
+    if self.mieru.args.locale is not None:
+      localeId = self.mieru.args.locale
     else:
-      # QtQuick 1.0 fallback
-      url = QUrl('gui/qml_1.0_fremantle/main.qml')
-
-    # Set the QML file and show it
-    self.view.setSource(url)
+      localeId = locale.getlocale()[0]
+    translator.load("gui/qml/i18n/qml_" + localeId)
+    self.app.installTranslator(translator)
+    
+    # Set the QML file and show
+    self.view.setSource(QUrl('gui/qml/main.qml'))
+    self.view.show()
     self.window.closeEvent = self._qtWindowClosed
 
     self.rootObject = self.view.rootObject()
@@ -95,15 +85,6 @@ class QMLGUI(gui.GUI):
     if self.panora.get("QMLShowFirstStartDialog", True):
       self.rootObject.openFirstStartDialog()
 
-#  def resize(self, w, h):
-#    self.window.resize(w,h)
-#
-#  def getWindow(self):
-#    return self.window
-#
-#  def setWindowTitle(self, title):
-#    self.window.set_title(title)
-#
   def getToolkit(self):
     return "QML"
 
@@ -114,13 +95,7 @@ class QMLGUI(gui.GUI):
       self.window.showFullScreen()
 
   def startMainLoop(self):
-    """start the main loop or its equivalent"""
-
-#    # restore page centering
-#    mv = self.rootObject.findChild(QObject, "mainView")
-#    mv.restoreContentShift()
-
-    # start main loop
+    """start the Qt main loop"""
     self.view.showFullScreen()
     self.window.show()
     self.app.exec_()
@@ -130,7 +105,7 @@ class QMLGUI(gui.GUI):
     self.panora.destroy()
 
   def stopMainLoop(self):
-    """stop the main loop or its equivalent"""
+    """stop the Qt main loop"""
     # notify QML GUI first
     """NOTE: due to calling Python properties
     from onDestruction handlers causing
@@ -139,16 +114,6 @@ class QMLGUI(gui.GUI):
 
     # quit the application
     self.app.exit()
-
-  def getScale(self):
-    """get scale from the page flickable"""
-    mv = self.rootObject.findChild(QObject, "mainView")
-    return mv.getScale()
-
-  def getUpperLeftShift(self):
-    #return (pf.contX(), pf.contY())
-    mv = self.rootObject.findChild(QObject, "mainView")
-    return (mv.getXShift(), mv.getYShift())
 
   def getWindow(self):
     return self.window
@@ -162,13 +127,7 @@ class QMLGUI(gui.GUI):
     text = newlines2brs(text)
     self.rootObject.notify(text)
 
-#  def idleAdd(self, callback, *args):
-#    gobject.idle_add(callback, *args)
-#
-#  def _destroyCB(self, window):
-#    self.panora.destroy()
-
-class MangaPageImageProvider(QDeclarativeImageProvider):
+class PhotoProvider(QDeclarativeImageProvider):
   """the MangaPageImageProvider class provides manga pages to the QML layer"""
   def __init__(self, gui):
       QDeclarativeImageProvider.__init__(self, QDeclarativeImageProvider.ImageType.Image)
@@ -210,40 +169,6 @@ class Panora(QObject):
     self.panora = gui.panora
     self.currentFolder = None
     self.oldImageFilename = None
-
-  @QtCore.Slot(result=str)
-  def next(self):
-    activeManga = self.gui.panora.getActiveManga()
-    if activeManga:
-      path = activeManga.getPath()
-      idValid, id = activeManga.next()
-      if idValid:
-        return "image://page/%s|%d" % (path, id)
-      else:
-        return "ERROR do something else"
-    else:
-      return "ERROR no active manga"
-
-  @QtCore.Slot(result=str)
-  def previous(self):
-    activeManga = self.gui.panora.getActiveManga()
-    if activeManga:
-      path = activeManga.getPath()
-      idValid, id = activeManga.previous()
-      if idValid:
-        return "image://page/%s|%d" % (path, id)
-      else:
-        return "ERROR do something else"
-    else:
-      return "ERROR no active manga"
-
-  @QtCore.Slot(result=str)
-  def getPrettyName(self):
-    activeManga = self.gui.panora.getActiveManga()
-    if activeManga:
-      return activeManga.getPrettyName()
-    else:
-      return "Name unknown"
 
   @QtCore.Slot(result=str)
   def getAboutText(self):
@@ -368,105 +293,11 @@ class Panora(QObject):
     else:
       return "image name unknown"
 
-
-
-
-  @QtCore.Slot()
-  def updateHistoryListModel(self):
-    print "updating history list model"
-    """the history list model needs to be updated only before the list
-    is actually shown, no need to update it dynamically every time a manga is added
-    to history"""
-    mangaStateObjects = [MangaStateWrapper(state) for state in self.gui.panora.getSortedHistory()]
-    self.gui.historyListModel.setThings(mangaStateObjects)
-    self.gui.historyListModel.reset()
-
-  @QtCore.Slot()
-  def eraseHistory(self):
-    print "erasing history"
-    """the history list model needs to be updated only before the list
-    is actually shown, no need to update it dynamically every time a manga is added
-    to history"""
-    self.gui.panora.clearHistory()
-
-  @QtCore.Slot(result=float)
-  def getActiveMangaScale(self):
-    """return the saved scale of the currently active manga"""
-    activeManga = self.panora.getActiveManga()
-    if activeManga:
-      return activeManga.getScale()
-    else:
-      return 1.0
-
-  @QtCore.Slot(result=float)
-  def getActiveMangaShiftX(self):
-    """return the saved X shift of the currently active manga"""
-    activeManga = self.panora.getActiveManga()
-    print self.panora.getActiveManga()
-    if activeManga:
-      return activeManga.getShiftX()
-    else:
-      return 0.0
-
-  @QtCore.Slot(result=float)
-  def getActiveMangaShiftY(self):
-    """return the saved Y shift of the currently active manga"""
-    activeManga = self.panora.getActiveManga()
-    if activeManga:
-      return activeManga.getShiftY()
-    else:
-      return 0.0
-
   @QtCore.Slot()
   def quit(self):
     """shut down panora"""
     self.gui.panora.destroy()
 
-
-class Stats(QtCore.QObject):
-  """make stats available to QML and integrable as a property"""
-  def __init__(self, stats):
-      QtCore.QObject.__init__(self)
-      self.stats = stats
-
-  @QtCore.Slot(bool)
-  def setOn(self, ON):
-    self.panora.stats.setOn(ON)
-
-  @QtCore.Slot()
-  def reset(self):
-    self.stats.resetStats()
-
-  @QtCore.Slot(result=str)
-  def getStatsText(self):
-      print ""
-
-  def _get_statsText(self):
-    text = newlines2brs(re.sub('\n', '<br>', self.stats.getStatsText(headline=False)))
-    return text
-
-  def _set_statsText(self, statsText):
-    """if this method is called, it should trigger the
-    usual property changed notification
-    NOTE: as the Info page is loaded from file each time
-    it is opened, the stats text is updated on startup and
-    thus this method doesn't need to be called"""
-    self.on_statsText.emit()
-
-  def _get_enabled(self):
-    return self.stats.isOn()
-
-  def _set_enabled(self, value):
-    self.stats.setOn(value)
-    self.on_enabled.emit()
-
-  on_statsText = QtCore.Signal()
-  on_enabled = QtCore.Signal()
-
-  statsText = QtCore.Property(str, _get_statsText, _set_statsText,
-          notify=on_statsText)
-  enabled = QtCore.Property(bool, _get_enabled, _set_enabled,
-          notify=on_enabled)
 
 class Platform(QtCore.QObject):
   """make stats available to QML and integrable as a property"""
@@ -586,95 +417,3 @@ class Options(QtCore.QObject):
     print "SET"
     print key, value
     return self.panora.set(key, value)
-
-
-
-# ** history list wrappers **
-
-class MangaStateWrapper(QtCore.QObject):
-  def __init__(self, state):
-    QtCore.QObject.__init__(self)
-    # unwrap the history storage wrapper
-    state = state['state']
-    self.path = state['path']
-    self.mangaName = manga_module.path2prettyName(self.path)
-    self.pageNumber = state['pageNumber'] + 1
-    self.pageCount = state['pageCount']
-    self.state = state
-    self._checked = False
-
-  def __str__(self):
-    return u'%s %d/%d'.encode('utf-8') % (self.mangaName, self.pageNumber, self.pageCount)
-
-  def _name(self):
-    """NOTE: str(self) won't work due to some unicode issues"""
-    return self.__str__()
-
-  def is_checked(self):
-    return self._checked
-
-  def toggle_checked(self):
-    self._checked = not self._checked
-    self.changed.emit()
-
-  # signals
-  changed = QtCore.Signal()
-
-  # setup the Qt properties
-  name = QtCore.Property(unicode, _name, notify=changed)
-  checked = QtCore.Property(bool, is_checked, notify=changed)
-
-class HistoryListModel(QtCore.QAbstractListModel):
-  COLUMNS = ('thing',)
-
-  def __init__(self, panora, things):
-    QtCore.QAbstractListModel.__init__(self)
-    self.panora = panora
-    self._things = things
-    self.setRoleNames(dict(enumerate(HistoryListModel.COLUMNS)))
-
-  def setThings(self, things):
-    #print "SET THINGS"
-    self._things = things
-
-  def rowCount(self, parent=QtCore.QModelIndex()):
-    #print "ROW"
-    #print self._things
-    return len(self._things)
-
-  def checked(self):
-    return [x for x in self._things if x.checked]
-
-  def data(self, index, role):
-    #print "DATA"
-    #print self._things
-    return self._things[index.row()]
-#    if index.isValid() and role == HistoryListModel.COLUMNS.index('thing'):
-#      return self._things[index.row()]
-#    return None
-
-  @QtCore.Slot()
-  def removeChecked(self):
-    paths = []
-    checked = self.checked()
-    #count = len(self.checked())
-    for state in checked:
-      paths.append(state.path)
-    print paths
-    self.panora.removeMangasFromHistory(paths)
-    # quick and dirty remove
-    for state in checked:
-      self._things.remove(state)
-
-class HistoryListController(QtCore.QObject):
-  def __init__(self, panora):
-    QtCore.QObject.__init__(self)
-    self.panora = panora
-        
-  @QtCore.Slot(QtCore.QObject)
-  def thingSelected(self, wrapper):
-    self.panora.openMangaFromState(wrapper.state)
-
-  @QtCore.Slot(QtCore.QObject, QtCore.QObject)
-  def toggled(self, model, wrapper):
-    wrapper.toggle_checked()
