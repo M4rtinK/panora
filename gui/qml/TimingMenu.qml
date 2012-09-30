@@ -6,7 +6,7 @@ import com.nokia.extras 1.0
 Menu {
     id : pagingDialog
     MenuLayout {
-        //property int usableWidth : width - 16
+        property int usableWidth : width - 16
         id : mLayout
         Label {
             text: "<b>Timed capture</b>"
@@ -17,10 +17,10 @@ Menu {
             spacing : 10
             TextField {
                 id : seconds
-                anchors.left : parent.left
-                anchors.right : parent.right
-                anchors.leftMargin : 0
-                anchors.rightMargin : 0
+                //anchors.left : parent.left
+                //anchors.right : parent.right
+                //anchors.leftMargin : 0
+                //anchors.rightMargin : 0
                 font.pointSize : 24
                 validator : IntValidator {bottom : 1}
                 inputMethodHints: Qt.ImhDigitsOnly
