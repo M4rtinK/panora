@@ -290,7 +290,7 @@ Page {
 
     Label {
         anchors.centerIn : parent
-        text : sqTr("<h2>No previous photo</h2>")
+        text : qsTr("<h2>No previous photo</h2>")
         color: "white"
         visible : !oView.newIsOld && oldImage.source == ""
     }
