@@ -231,23 +231,6 @@ class Panora(QObject):
 
   @QtCore.Slot(str, str, int, result=str)
   def storeImage(self, capturedImagePath, projectName, index):
-    today = datetime.date.today()
-
-    # zero padding
-    if today.day < 10:
-      day = "0%d" % today.day
-    else:
-      day = "%s" % today.day
-
-    if today.month < 10:
-      month = "0%d" % today.month
-    else:
-      month = "%s" % today.month
-
-      #TODO: zero padding for years
-
-    #    dateString = str(today.year) + month + day
-    dateString = str(int(time.time()))
     newFilename = "%s_panora_%s.jpg" % (self.oldImageFilename, dateString)
     folder = self.mieru.platform.getDefaultPhotoStoragePath()
     storagePath = os.path.join(folder, newFilename)
