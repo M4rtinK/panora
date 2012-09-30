@@ -121,4 +121,8 @@ PageStackWindow {
             options.set("QMLShowFirstStartDialog", false)
         }
     }
+
+    ProjectDialog {
+        id : projectDialog
+    }
 }

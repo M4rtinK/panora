@@ -212,7 +212,7 @@ class Panora(QObject):
   @QtCore.Slot(str, str, int, result=str)
   def storeImage(self, capturedImagePath, projectName, index):
     newFilename = "%s_%s.jpg" % (projectName, index)
-    folder = self.mieru.platform.getDefaultPhotoStoragePath()
+    folder = self.panora.platform.getDefaultPhotoStoragePath()
     storagePath = os.path.join(folder, newFilename)
 
     shutil.move(capturedImagePath, storagePath)
@@ -233,6 +233,40 @@ class Panora(QObject):
     #
     #    newFilename+= str(newHighestNumber).zfill(3)
     #    newFilename+= ".jpg"
+
+  @QtCore.Slot(result=str)
+  def getProjectName(self):
+    """get a usable project name - the last used one or the default string"""
+    lastName = self.panora.get('lastProjectName', 'panora_project')
+    return self.checkProjectName(lastName)
+
+  @QtCore.Slot(str, result=str)
+  def checkProjectName(self, projectName):
+    # check if the name already exists
+    # and add a numeric prefix if it does
+    usableIndex = None
+    storagePath = self.panora.platform.getDefaultPhotoStoragePath()
+
+    filename = "%s_001.jpg" % projectName
+    if not os.path.exists(os.path.join(storagePath, filename)):
+      # project name not yet used - use it directly
+      return projectName
+    else:
+      # find a free numeric suffix
+      #TODO: a more efficient method ?
+      # globbing the name & sorting the result ?
+      for index in range(1, 999):
+        filename = "%s_%03d_001.jpg" % (projectName, index)
+        if not os.path.exists(os.path.join(storagePath, filename)):
+          usableIndex = index
+          break
+      if usableIndex:
+        return "%s_%03d" % (projectName, usableIndex)
+      else:
+        # for some reason there already 999 projects with this name
+        # -> use the epoch as a fallback
+        epochString = "%d" % time.time()
+        return "%s_%s" % epochString
 
   @QtCore.Slot(result=str)
   def getSavedFilePath(self):
@@ -297,12 +331,12 @@ class Options(QtCore.QObject):
     QtCore.QObject.__init__(self)
     self.panora = panora
 
-  """ like this, the function can accept
- and return different types to and from QML
- (basically anything that matches some of the decorators)
- as per PySide developers, there should be no perfromance
- penalty for doing this and the order of the decorators
- doesn't mater"""
+  # like this, the function can accept
+  # and return different types to and from QML
+  # (basically anything that matches some of the decorators)
+  # as per PySide developers, there should be no perfromance
+  # penalty for doing this and the order of the decorators
+  # doesn't mater
 
   @QtCore.Slot(str, bool, result=bool)
   @QtCore.Slot(str, int, result=int)

@@ -8,7 +8,7 @@ Menu {
         MenuItem {
             text : qsTr("Start new project")
             onClicked : {
-            rootWindow.pageStack.push(oView)
+            projectDialog.open()
             }
         }
 

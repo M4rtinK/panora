@@ -83,8 +83,6 @@ Page {
             StateChangeScript {
                 script : {
                     shutterVisible = true
-                    imagePreview.visible = false
-                    previewMA.visible = false
                     camera.visible = true
                     timersEnabled = false
                     timedB.visible = false
@@ -96,8 +94,6 @@ Page {
             StateChangeScript {
                 script : {
                     shutterVisible = true
-                    imagePreview.visible = false
-                    previewMA.visible = false
                     camera.visible = true
                     timersEnabled = false
                     timedB.visible = true
@@ -109,8 +105,6 @@ Page {
             StateChangeScript {
                 script : {
                     shutterVisible = false
-                    imagePreview.visible = false
-                    previewMA.visible = false
                     camera.visible = true
                     timersEnabled = true
                     timedB.visible = true
@@ -157,8 +151,6 @@ Page {
             if (oView.newIsOld || timersEnabled) {
                 oldImage.rotation = screen.currentOrientation == 1 ? 90 :0
                 oldImageURL = preview
-            } else {
-                imagePreview.source = preview
             }
         }
 
