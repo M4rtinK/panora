@@ -45,7 +45,7 @@ HeaderDialog {
                 enabled : nameField.text != ""
                 iconSource : "image://theme/icon-m-toolbar-done"
                 width : pButtonRow.usableWidth/2.0
-                onClicked: {
+                onClicked : {
                     // notify the rootWindow
                     rootWindow.newProjectStarted(nameField.text)
                     close()
@@ -53,6 +53,12 @@ HeaderDialog {
                     rootWindow.pageStack.push(oView)
                 }
             }
+        }
+    }
+    onStatusChanged : {
+        // update project name
+        if (status == DialogStatus.Opening) {
+            nameField.text = panora.getProjectName()
         }
     }
 }
