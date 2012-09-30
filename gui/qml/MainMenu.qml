@@ -7,6 +7,9 @@ Menu {
     MenuLayout {
         MenuItem {
             text : qsTr("Start new project")
+            onClicked : {
+            rootWindow.pageStack.push(oView)
+            }
         }
 
         /**
@@ -14,7 +17,7 @@ Menu {
             text : qsTr("Options")
             onClicked : {
                 rootWindow.openFile("OptionsPage.qml")
-                }
+            }
         }
         **/
 

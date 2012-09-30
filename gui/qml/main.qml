@@ -90,6 +90,12 @@ PageStackWindow {
     }
 
 
+    OverlayView {
+        id : oView
+    }
+
+
+
     // ** trigger notifications
     function notify(text) {
         notification.text = text;
@@ -102,7 +108,6 @@ PageStackWindow {
         height : rootWindow.height/5.0
         // prevent overlapping with status bar
         y : rootWindow.showStatusBar ? rootWindow.statusBarHeight + 8 : 8
-
     }
 
     QueryDialog {

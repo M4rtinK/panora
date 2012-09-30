@@ -238,6 +238,13 @@ Page {
         id : mainViewToolBar
         visible: false
         ToolIcon {
+            iconId: ""
+        }
+        ToolIcon {
+            iconId : "toolbar-settings"
+            onClicked : { overlayMenu.open() }
+        }
+        ToolIcon {
             id : backTI
             iconId: "toolbar-view-menu"
             onClicked: {
@@ -248,13 +255,7 @@ Page {
                 }
             }
         }
-        ToolIcon {
-            iconId : "toolbar-settings"
-            onClicked : { overlayMenu.open() }
-        }
-        ToolIcon {
-            iconId: ""
-        }
+
     }
 
     /** Main menu **/
