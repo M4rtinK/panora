@@ -63,7 +63,7 @@ HeaderDialog {
                 anchors.bottom : donationButton.top
                 anchors.bottomMargin : 16
                 anchors.horizontalCenter : parent.horizontalCenter
-                text : qsTr("<b>Do you like Mieru ? Donate !</b>")
+                text : qsTr("<b>Do you like Panora ? Donate !</b>")
                 color : "white"
             }
             Button {
