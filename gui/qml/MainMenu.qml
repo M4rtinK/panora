@@ -6,40 +6,12 @@ Menu {
     id : mainViewMenu
     MenuLayout {
         MenuItem {
-            text : "Open from gallery"
-            onClicked : {
-                rootWindow.pageStack.push(galleryPage)
-                }
-        }
-        MenuItem {
-            text : "Open from file"
-            onClicked : {
-                console.log("Opening file selector")
-                console.log(panora.getSavedFileSelectorPath())
-                fileSelector.down(panora.getSavedFileSelectorPath());
-                //fileSelector.down("/home/user/MyDocs");
-                fileSelector.open();
-            }
-        }
-        MenuItem {
-            text : "Open from URL"
-            onClicked : {
-                urlMenu.open()
-                }
-        }
-        MenuItem {
-            text : "Capture with camera"
-            onClicked : {
-                prepareForNewImage()
-                oView.state = "imageCapture"
-                oView.newIsOld = true
-
-                }
+            text : qsTr("Start new project")
         }
 
         /**
         MenuItem {
-            text : "Options"
+            text : qsTr("Options")
             onClicked : {
                 rootWindow.openFile("OptionsPage.qml")
                 }
@@ -47,7 +19,7 @@ Menu {
         **/
 
         MenuItem {
-            text : "About"
+            text : qsTr("About")
             onClicked : {
                 rootWindow.openFile("AboutPage.qml")
             }
