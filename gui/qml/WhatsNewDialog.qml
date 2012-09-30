@@ -5,7 +5,7 @@ import com.nokia.meego 1.0
 
 HeaderDialog {
     id : whatsNewDialog
-    titleText : "What's new in Mieru " + readingState.getNumericVersionString()
+    titleText : qsTr("What's new in Panora") + " " + panora.getNumericVersionString()
     property string releaseNotesText : ""
     content:Item {
         id: dialogContent
@@ -85,7 +85,7 @@ HeaderDialog {
                 text : qsTr("Don't show again")
                 onClicked : {
                     whatsNewDialog.close()
-                    readingState.disableReleaseNotesForCurrentVersion()
+                    panora.disableReleaseNotesForCurrentVersion()
                 }
             }
         }
