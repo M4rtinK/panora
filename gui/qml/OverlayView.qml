@@ -82,7 +82,7 @@ Page {
             name : "noImage"
             StateChangeScript {
                 script : {
-                    shutterVisible = false
+                    shutterVisible = true
                     imagePreview.visible = false
                     previewMA.visible = false
                     camera.visible = true
@@ -114,19 +114,6 @@ Page {
                     camera.visible = true
                     timersEnabled = true
                     timedB.visible = true
-                }
-            }
-        },
-        State {
-            name : "imagePreview"
-            StateChangeScript {
-                script : {
-                    shutterVisible = false
-                    imagePreview.visible = true
-                    previewMA.visible = true
-                    camera.visible = false
-                    timersEnabled = false
-                    timedB.visible = false
                 }
             }
         }
@@ -172,12 +159,12 @@ Page {
                 oldImageURL = preview
             } else {
                 imagePreview.source = preview
-                oView.state = "imagePreview"
             }
         }
 
         onImageSaved : {
             console.log("image saved")
+            /*
             var storagePath
             if (oView.newIsOld) {
                 panora.storeNewAsOld(capturedImagePath)
@@ -186,17 +173,8 @@ Page {
                 storagePath = panora.storeImage(capturedImagePath)
                 captureList.append({"path":storagePath})
             }
+            */
         }
-    }
-
-
-    /** Preview image **/
-    Image {
-        id : imagePreview
-        y: 0
-        rotation: screen.currentOrientation == 1 ? 90 :0
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter: parent.verticalCenter
     }
 
     /** Image overlay **/
@@ -219,17 +197,6 @@ Page {
                 oView.state = "noImage"
             }
         }
-    }
-
-    /** Preview label **/
-
-    Label {
-        visible : imagePreview.visible
-        text : "<h3>Tap to hide preview</h3>"
-        color : "white"
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.bottom : oView.bottom
-        anchors.bottomMargin : 48
     }
 
     /** Toolbar **/
@@ -265,7 +232,7 @@ Page {
     }
 
     /** Camera buttons **/
-    Button {
+    Button { // landscape shutter
         id : shutterL
         width : 160
         height : 100
@@ -281,7 +248,7 @@ Page {
         }
     }
 
-    Button {
+    Button { // portrait shutter
         id : shutterP
         width : 160
         height : 100
@@ -289,7 +256,6 @@ Page {
         anchors.horizontalCenter : parent.horizontalCenter
         anchors.bottom : parent.bottom
         anchors.bottomMargin : 16
-
 
         opacity : 0.7
         iconSource : "image://theme/icon-m-content-camera"
@@ -320,22 +286,11 @@ Page {
         }
     }
 
-
-
-    MouseArea {
-        id : previewMA
-        anchors.fill : parent
-        onClicked : {
-            oView.state = "imageCapture"
-        }
-    }
-
-
-    /** No pages loaded label **/
+    /** No previous photo label **/
 
     Label {
         anchors.centerIn : parent
-        text : sqTr("<h2>No project started</h2>")
+        text : sqTr("<h2>No previous photo</h2>")
         color: "white"
         visible : !oView.newIsOld && oldImage.source == ""
     }
