@@ -29,7 +29,6 @@ Page {
         }
     }
 
-
     // workaround for calling python properties causing segfaults
     function shutdown() {
         //console.log("main view shutting down")
@@ -51,7 +50,7 @@ Page {
 
     // restore possible saved rotation lock value
     function restoreRotation() {
-        var savedRotation = options.get("QMLmainViewRotation", "auto")
+        var savedRotation = options.get("QMLMainViewRotation", "auto")
         if ( savedRotation == "auto" ) {
             oView.orientationLock = PageOrientation.Automatic
         } else if ( savedRotation == "portrait" ) {
@@ -335,8 +334,7 @@ Page {
 
     Label {
         anchors.centerIn : parent
-        //text : "<h1>No pages loaded</h1>"
-        text : "<h2>No old image loaded</h2>"
+        text : sqTr("<h2>No project started</h2>")
         color: "white"
         visible : !oView.newIsOld && oldImage.source == ""
     }
@@ -346,7 +344,7 @@ Page {
 
     Label {
         anchors.centerIn : parent
-        text : sElapsed == 0 && timedCaptureCount>0 ? "Taking picture" : + (timedCaptureInterval-sElapsed) +" s to next capture"
+        text : sElapsed == 0 && timedCaptureCount>0 ? qsTr("Taking picture") : + (timedCaptureInterval-sElapsed) +qsTr(" s to next capture")
         color: "white"
         visible : timersEnabled
         font.pixelSize : 32
