@@ -152,22 +152,6 @@ class Panora:
     if key in self.watches.keys():
       self._notifyWatcher(key, value)
 
-  def _saveState(self):
-    pass
-
-  def _restoreState(self):
-    pass
-
-  def getFittingModes(self):
-    """return list of fitting mode with key and description"""
-    modes = [
-      ("original", "fit to original size"),
-      ("width", "fit to width"),
-      ("height", "fit to height"),
-      ("screen", "fit to screen")
-    ]
-    return modes
-
 if __name__ == "__main__":
   panora = Panora()
 

@@ -1,3 +1,7 @@
+//AboutPage.qml
+import QtQuick 1.1
+import com.nokia.meego 1.0
+
 Page {
     id: aboutPage
         anchors.fill : parent
@@ -25,7 +29,7 @@ Page {
                     id : versionLabel
                     anchors.top : parent.top
                     anchors.horizontalCenter : parent.horizontalCenter
-                    text : "<h2>Panora " + readingState.getVersionString() + "</h2>"
+                    text : "<h2>Panora " + panora.getVersionString() + "</h2>"
                 }
                 Image {
                     id : mieruIcon
