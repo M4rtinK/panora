@@ -72,7 +72,7 @@ class Panora:
 
       self.platform = harmattan.Harmattan(self)
     else:
-      print('error: platform not known')
+      print("can't start: current platform unknown")
       sys.exit(1)
 
     # create the GUI
