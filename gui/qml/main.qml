@@ -9,11 +9,7 @@ PageStackWindow {
     id : rootWindow
     anchors.fill : parent
     initialPage : OverlayView {
-                      id : oView
-                      }
-
-    Component.onCompleted: {
-        //theme.inverted = true;
+        id : oView
     }
 
     property int statusBarHeight : 36
@@ -33,12 +29,12 @@ PageStackWindow {
             console.log("Error loading: " + component.errorString());
     }
 
-    // handle Mieru shutdown
+    // handle Panora shutdown
     function shutdown() {
         oView.shutdown()
     }
 
-    // open dialog with information about how to turn pages
+    // open dialog with information about how to use Panora
     function openFirstStartDialog() {
         firstStartDialog.open()
     }
@@ -75,19 +71,13 @@ PageStackWindow {
     /** Gallery selection dialog **/
 
 
-    GalleryPage {
-        id : galleryPage
-    }
-
+    //GalleryPage {
+    //    id : galleryPage
+    //}
 
     /** Overlay menu **/
     OverlayMenu {
         id : overlayMenu
-    }
-
-    /** Url menu **/
-    UrlMenu {
-        id : urlMenu
     }
 
     /** Timing menu **/
@@ -95,16 +85,8 @@ PageStackWindow {
         id : timingMenu
     }
 
-    SideBySideMenu {
-      id : pageFitSelectorSbS
-    }
-
     ListModel {
         id : captureList
-    }
-
-    ComparisonPage {
-        id : comparisonPage
     }
 
 
@@ -127,11 +109,9 @@ PageStackWindow {
         id : firstStartDialog
         icon : "image://icons/panora.svg"
         titleText : "How to use Panora"
-        message : "<b>Open</b> an <b>old image</b>.<br>"
-              +"Take a picture <b>of the place on the image</b>.<br>"
-              +"Compare the <b>old image</b> with the <b>new one</b>."
-        acceptButtonText : "Don't show again"
-        rejectButtonText : "OK"
+        message : "Select a project name and start taking pictures with the hints provided by Panora.<br>Once you are finished, process the pictures with panorama processing software, such as <b>Hugin</b>."
+        acceptButtonText : qsTr("Don't show again")
+        rejectButtonText : qsTr("OK")
         onAccepted: {
             options.set("QMLShowFirstStartDialog", false)
         }
