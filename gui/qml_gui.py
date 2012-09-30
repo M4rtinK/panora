@@ -229,8 +229,8 @@ class Panora(QObject):
     self.gui._notify("Saved as:<br><b>%s</b>" % storagePath)
     return storagePath
 
-  @QtCore.Slot(str, result=str)
-  def storeImage(self, capturedImagePath, projectName):
+  @QtCore.Slot(str, str, int, result=str)
+  def storeImage(self, capturedImagePath, projectName, index):
     today = datetime.date.today()
 
     # zero padding
@@ -249,14 +249,13 @@ class Panora(QObject):
     #    dateString = str(today.year) + month + day
     dateString = str(int(time.time()))
     newFilename = "%s_panora_%s.jpg" % (self.oldImageFilename, dateString)
+    folder = self.mieru.platform.getDefaultPhotoStoragePath()
+    storagePath = os.path.join(folder, newFilename)
 
-    suitableName = None
-    for i in range(1, 999):
-      pass
-
-
-
-
+    shutil.move(capturedImagePath, storagePath)
+    print storagePath
+    self.gui._notify("Saved as:<br><b>%s</b>" % newFilename)
+    return storagePath
 
     #    list = glob.glob(os.path.join(self.currentFolder,"%s*" % newFilename))
     #    print list
@@ -272,13 +271,6 @@ class Panora(QObject):
     #
     #    newFilename+= str(newHighestNumber).zfill(3)
     #    newFilename+= ".jpg"
-
-    savedImagePath = os.path.join(self.currentFolder, newFilename)
-
-    shutil.move(capturedImagePath, savedImagePath)
-    print savedImagePath
-    self.gui._notify("Saved as:<br><b>%s</b>" % newFilename)
-    return savedImagePath
 
   @QtCore.Slot(result=str)
   def getSavedFilePath(self):
