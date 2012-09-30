@@ -32,7 +32,7 @@ sys.path.append('platforms')
 class Panora:
   def destroy(self):
     self.options.save()
-    print "panora quiting"
+    print("%s quiting" % self.getPrettyName() )
     self.gui.stopMainLoop()
 
   def __init__(self):
@@ -101,7 +101,7 @@ class Panora:
     return ".%s" % self.getName()
 
   def notify(self, message, icon=""):
-    print "notification: %s" % message
+    print("notification: %s" % message)
     self.platform.notify(message, icon)
 
   ## ** persistent dictionary handling * ##
@@ -131,7 +131,7 @@ class Panora:
         if callback:
           callback(key, value, oldValue, *args)
         else:
-          print "invalid watcher callback :", callback
+          print("invalid watcher callback :", callback)
 
   def get(self, key, default):
     """

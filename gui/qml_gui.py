@@ -36,7 +36,7 @@ class QMLGUI(gui.GUI):
         self.gui = gui
 
       def closeEvent(self, event):
-        print "shutting down"
+        print("shutting down")
         self.gui.panora.destroy()
 
     self.app = QApplication(sys.argv)
@@ -155,7 +155,7 @@ QML does not seem to handle .. in the url very well"""
 
   def requestImage(self, iconFilename, size, requestedSize):
   #    print("ICON IMAGE REQUESTED")
-  #    print iconFilename
+  #    print(iconFilename)
     try:
       f = open('icons/%s' % iconFilename, 'r')
       img = QImage()
@@ -216,17 +216,16 @@ class Panora(QObject):
     storagePath = os.path.join(folder, newFilename)
 
     shutil.move(capturedImagePath, storagePath)
-    print storagePath
     self.gui._notify("Saved as:<br><b>%s</b>" % newFilename)
     return storagePath
 
     #    list = glob.glob(os.path.join(self.currentFolder,"%s*" % newFilename))
-    #    print list
+    #    print(list)
     #    if list:
     #
     #      numericList = map(lambda x: (x.split(newFilename)[1]),list)
     #      numericList = map(lambda x: int(x.split(newFilename)[1]),list)
-    #      print numericList
+    #      print(numericList)
     #      highestNumber = sorted(numericList)[-1]
     #      newHighestNumber = highestNumber + 1
     #    else:
@@ -311,8 +310,8 @@ class Options(QtCore.QObject):
   @QtCore.Slot(str, float, result=float)
   def get(self, key, default):
     """get a value from Panoras persistent options dictionary"""
-    print "GET"
-    print key, default, self.panora.get(key, default)
+    print("GET")
+    print(key, default, self.panora.get(key, default))
     return self.panora.get(key, default)
 
 
@@ -322,8 +321,8 @@ class Options(QtCore.QObject):
   @QtCore.Slot(str, float)
   def set(self, key, value):
     """set a keys value in Panoras persistent options dictionary"""
-    print "SET"
-    print key, value
+    print("SET")
+    print(key, value)
     return self.panora.set(key, value)
 
   # for old PySide versions that don't support multiple
@@ -331,48 +330,48 @@ class Options(QtCore.QObject):
 
   @QtCore.Slot(str, bool, result=bool)
   def getB(self, key, default):
-    print "GET"
-    print key, default, self.panora.get(key, default)
+    print("GET")
+    print(key, default, self.panora.get(key, default))
     return self.panora.get(key, default)
 
   @QtCore.Slot(str, str, result=str)
   def getS(self, key, default):
-    print "GET"
-    print key, default, self.panora.get(key, default)
+    print("GET")
+    print(key, default, self.panora.get(key, default))
     return self.panora.get(key, default)
 
   @QtCore.Slot(str, int, result=int)
   def getI(self, key, default):
-    print "GET"
-    print key, default, self.panora.get(key, default)
+    print("GET")
+    print(key, default, self.panora.get(key, default))
     return self.panora.get(key, default)
 
   @QtCore.Slot(str, float, result=float)
   def getF(self, key, default):
-    print "GET"
-    print key, default, self.panora.get(key, default)
+    print("GET")
+    print(key, default, self.panora.get(key, default))
     return self.panora.get(key, default)
 
   @QtCore.Slot(str, bool)
   def setB(self, key, value):
-    print "SET"
-    print key, value
+    print("SET")
+    print(key, value)
     return self.panora.set(key, value)
 
   @QtCore.Slot(str, str)
   def setS(self, key, value):
-    print "SET"
-    print key, value
+    print("SET")
+    print(key, value)
     return self.panora.set(key, value)
 
   @QtCore.Slot(str, int)
   def setI(self, key, value):
-    print "SET"
-    print key, value
+    print("SET")
+    print(key, value)
     return self.panora.set(key, value)
 
   @QtCore.Slot(str, float)
   def setF(self, key, value):
-    print "SET"
-    print key, value
+    print("SET")
+    print(key, value)
     return self.panora.set(key, value)
