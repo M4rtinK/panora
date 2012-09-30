@@ -8,8 +8,8 @@ PageStackWindow {
     showToolBar : true
     id : rootWindow
     anchors.fill : parent
-    initialPage : OverlayView {
-        id : oView
+    initialPage : EmptyView {
+        id : eView
     }
 
     property int statusBarHeight : 36

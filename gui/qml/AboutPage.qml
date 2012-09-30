@@ -13,6 +13,14 @@ Page {
         ScrollDecorator {
              flickableItem : aboutFlickable
         }
+
+        tools: ToolBarLayout {
+            ToolIcon {
+                iconId: "toolbar-back"
+                onClicked: pageStack.pop()
+            }
+        }
+
         Flickable {
             id : aboutFlickable
             anchors.fill  : parent
