@@ -5,8 +5,7 @@ import os
 class Options:
   def __init__(self, panora):
     self.panora = panora
-    name = self.panora.getName()
-    optionsFilename = '%s_options.bin' % name
+    optionsFilename = '%s_options.bin' % self.panora.getName()
     profileFolderName = self.panora.getProfileFolderName()
     userHomePath = os.getenv("HOME")
     self.profileFolderPath = os.path.join(userHomePath, profileFolderName)
@@ -29,12 +28,12 @@ class Options:
         return False
 
   def save(self):
-#    print "options: saving options"
+  #    print "options: saving options"
     try:
       f = open(self.optionsPath, "w")
       marshal.dump(self.panora.getDict(), f)
       f.close()
-#      print "options: successfully saved"
+    #      print "options: successfully saved"
     except Exception, e:
       print "options: Exception while saving options:\n%s" % e
 
@@ -47,5 +46,3 @@ class Options:
     except Exception, e:
       self.panora.setDict({})
       print "options: exception while loading saved options:\n%s" % e
-
-

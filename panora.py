@@ -11,6 +11,7 @@ from threading import RLock
 startTs = timer.start()
 import options
 import startup
+
 timer.elapsed(startTs, "All modules combined")
 
 # set current directory to the directory
@@ -18,16 +19,17 @@ timer.elapsed(startTs, "All modules combined")
 # like this, Panora can be run from absolute path
 # eq.: ./opt/panora/panora.py -p harmattan -u harmattan
 import os
+
 abspath = os.path.abspath(__file__)
 dname = os.path.dirname(abspath)
 os.chdir(dname)
 
 # append the platform modules folder to path
 import sys
+
 sys.path.append('platforms')
 
 class Panora:
-
   def destroy(self):
     self.options.save()
     print "panora quiting"
@@ -49,7 +51,7 @@ class Panora:
     self.maxWatchId = 0
     self.watches = {}
 
-    initialSize = (854,480)
+    initialSize = (854, 480)
 
 
     # get the platform module
@@ -58,18 +60,22 @@ class Panora:
     if args.p:
       if args.p == "maemo5":
         import maemo5
+
         self.platform = maemo5.Maemo5(self, GTK=False)
       elif args.p == "harmattan":
         import harmattan
+
         self.platform = harmattan.Harmattan(self)
       else:
         import pc
-        self.platform = pc.PC(self)
 
-    else:
-      # no platform provided, fallback to PC module
-      import pc
-      self.platform = pc.PC(self)
+        self.platform = pc.PC(self)
+      #    else:
+      #      print('error: no')
+
+      #      # no platform provided, fallback to PC module
+      #      import pc
+      #      self.platform = pc.PC(self)
 
 
     # create the GUI
@@ -81,7 +87,7 @@ class Panora:
     timer.elapsed(startTs1, "GUI module import")
 
     # check if a path was specified in the startup arguments
-    if args.o != None:
+    if args.o is not None:
       try:
         print("loading manga from: %s" % args.o)
         self.setActiveManga(self.openManga(args.o))
@@ -92,9 +98,9 @@ class Panora:
 
     """ restore previously saved state (if available and no manga was 
     sucessfully loaded from a path provided by startup arguments"""
-#    self._restoreState()
+    #    self._restoreState()
 
-#    self.gui.toggleFullscreen()
+    #    self.gui.toggleFullscreen()
 
     timer.elapsed(initTs, "Init")
     timer.elapsed(startTs, "Complete startup")
@@ -104,19 +110,19 @@ class Panora:
 
   def getWindow(self):
     return self.window
-  
+
   def getName(self):
     return "panora"
-  
+
   def getPrettyName(self):
     return "Panora"
-  
+
   def getProfileFolderName(self):
     return ".%s" % self.getName()
-    
+
   def notify(self, message, icon=""):
     print "notification: %s" % message
-    self.platform.notify(message,icon)
+    self.platform.notify(message, icon)
 
   ## ** persistent dictionary handling * ##
 
@@ -132,7 +138,7 @@ class Panora:
     self.maxWatchId = id # TODO: recycle ids ? (alla PID)
     if key not in self.watches:
       self.watches[key] = [] # create the initial list
-    self.watches[key].append((id,callback,args))
+    self.watches[key].append((id, callback, args))
     return id
 
   def _notifyWatcher(self, key, value):
@@ -140,10 +146,10 @@ class Panora:
     callbacks = self.watches.get(key, None)
     if callbacks:
       for item in callbacks:
-        (id,callback,args) = item
+        (id, callback, args) = item
         oldValue = self.get(key, None)
         if callback:
-          callback(key,value,oldValue, *args)
+          callback(key, value, oldValue, *args)
         else:
           print "invalid watcher callback :", callback
 
@@ -176,11 +182,11 @@ class Panora:
   def getFittingModes(self):
     """return list of fitting mode with key and description"""
     modes = [
-            ("original", "fit to original size"),
-            ("width", "fit to width"),
-            ("height", "fit to height"),
-            ("screen", "fit to screen")
-            ]
+      ("original", "fit to original size"),
+      ("width", "fit to width"),
+      ("height", "fit to height"),
+      ("screen", "fit to screen")
+    ]
     return modes
 
 if __name__ == "__main__":
