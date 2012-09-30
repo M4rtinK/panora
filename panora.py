@@ -43,6 +43,7 @@ class Panora:
     # parse startup arguments
     start = startup.Startup()
     args = start.args
+    self.args = args
 
     # restore the persistent options dictionary
     self.d = {}
@@ -70,12 +71,12 @@ class Panora:
         import pc
 
         self.platform = pc.PC(self)
-      #    else:
-      #      print('error: no')
+        #    else:
+        #      print('error: no')
 
-      #      # no platform provided, fallback to PC module
-      #      import pc
-      #      self.platform = pc.PC(self)
+        #      # no platform provided, fallback to PC module
+        #      import pc
+        #      self.platform = pc.PC(self)
 
 
     # create the GUI
@@ -85,23 +86,6 @@ class Panora:
     self.gui = gui.getGui(self, 'QML', accel=True, size=initialSize)
 
     timer.elapsed(startTs1, "GUI module import")
-
-    # check if a path was specified in the startup arguments
-    if args.o is not None:
-      try:
-        print("loading manga from: %s" % args.o)
-        self.setActiveManga(self.openManga(args.o))
-        print('manga loaded')
-      except Exception, e:
-        print("loading manga from path: %s failed" % args.o)
-        print(e)
-
-    """ restore previously saved state (if available and no manga was 
-    sucessfully loaded from a path provided by startup arguments"""
-    #    self._restoreState()
-
-    #    self.gui.toggleFullscreen()
-
     timer.elapsed(initTs, "Init")
     timer.elapsed(startTs, "Complete startup")
 
