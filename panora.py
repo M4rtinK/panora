@@ -21,8 +21,8 @@ timer.elapsed(startTs, "All modules combined")
 import os
 
 abspath = os.path.abspath(__file__)
-dname = os.path.dirname(abspath)
-os.chdir(dname)
+dName = os.path.dirname(abspath)
+os.chdir(dName)
 
 # append the platform modules folder to path
 import sys
@@ -54,30 +54,26 @@ class Panora:
 
     initialSize = (854, 480)
 
-
     # get the platform module
     self.platform = None
+    # get the platform ID string
+    platformId = "harmattan" # safe fallback
+    if args.p is None:
+      import platform_detection
+      # platform detection
+      result = platform_detection.getBestPlatformModuleId()
+      if result:
+        platformId = result
+    else: # use the CLI provided value
+      platformId = args.p
 
-    if args.p:
-      if args.p == "maemo5":
-        import maemo5
+    if platformId == "harmattan":
+      import harmattan
 
-        self.platform = maemo5.Maemo5(self, GTK=False)
-      elif args.p == "harmattan":
-        import harmattan
-
-        self.platform = harmattan.Harmattan(self)
-      else:
-        import pc
-
-        self.platform = pc.PC(self)
-        #    else:
-        #      print('error: no')
-
-        #      # no platform provided, fallback to PC module
-        #      import pc
-        #      self.platform = pc.PC(self)
-
+      self.platform = harmattan.Harmattan(self)
+    else:
+      print('error: platform not known')
+      sys.exit(1)
 
     # create the GUI
     startTs1 = timer.start()
@@ -161,7 +157,6 @@ class Panora:
 
   def _restoreState(self):
     pass
-
 
   def getFittingModes(self):
     """return list of fitting mode with key and description"""
