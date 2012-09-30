@@ -66,7 +66,6 @@ class QMLGUI(gui.GUI):
 
         # activate translation
         translator = QtCore.QTranslator(self.app)
-
         if self.mieru.args.locale is not None:
             localeId = self.mieru.args.locale
         else:
@@ -126,7 +125,6 @@ class QMLGUI(gui.GUI):
        InfoBanner notification"""
 
         # QML uses <br> instead of \n for linebreak
-
         text = newlines2brs(text)
         self.rootObject.notify(text)
 
@@ -145,7 +143,6 @@ class PhotoProvider(QDeclarativeImageProvider):
         imageFileObject = page.popImage()
         img = QImage()
         img.loadFromData(imageFileObject.read())
-
         return img
 
 
@@ -205,15 +202,6 @@ class Panora(QObject):
         self.panora.set('lastFile', path)
         self.currentFolder = folder
         self.oldImageFilename = filename
-
-    @QtCore.Slot(str)
-    def urlOpened(self, url):
-        # remove the "file:// part of the path"
-        folder = "/home/user/MyDocs/pictures"
-        self.currentFolder = folder
-        filename = os.path.basename(url)
-        self.oldImageFilename = filename
-        urllib.urlretrieve(url, os.path.join(folder, filename))
 
     @QtCore.Slot(result=str)
     def getSavedFileSelectorPath(self):
