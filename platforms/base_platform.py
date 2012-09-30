@@ -4,6 +4,7 @@
 
 #import gtk
 #import paging_dialog
+import os
 
 class BasePlatform:
   def __init__(self):
@@ -32,30 +33,6 @@ class BasePlatform:
     """show a notification, if possible"""
     pass
 
-  def showPagingDialogCB(self, button):
-    """for showing paging diloag from button CB"""
-    self.showPagingDialog()
-
-  def showPagingDialog(self):
-    manga = self.panora.getActiveManga()
-    if manga:
-      self.pagingDialogBeforeOpen()
-      paging_dialog.PagingDialog(manga)
-    else:
-      self.notify("nothing loaded - paging disabled")
-
-  def pagingDialogBeforeOpen(self):
-    """do something before opening the paging dialog"""
-    pass
-
-  def showInfo(self):
-    """show/witch to the options info"""
-    pass
-
-  def showOptions(self):
-    """show/witch to the options window"""
-    pass
-
   def minimize(self):
     """minimize the main window"""
     pass
@@ -78,15 +55,6 @@ class BasePlatform:
     """a fail-safe path for the file/folder selector on its first opening"""
     return '/'
 
-  # GTK specific
-
-  def Button(self, label=""):
-    """return classic GTK button"""
-    return gtk.Button(label)
-
-  def CheckButton(self, label=""):
-    """return classic GTK check button"""
-    return gtk.CheckButton(label)
-
-
-
+  def getDefaultPhotoStoragePath(self):
+    """use the home directory of the current user to store images by default"""
+    return os.getenv("HOME")

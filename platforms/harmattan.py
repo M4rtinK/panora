@@ -20,6 +20,9 @@ class Harmattan(BasePlatform):
     users will store their mangas and comic books"""
     return "/home/user/MyDocs/"
 
+  def getDefaultPhotoStoragePath(self):
+    return "/home/user/MyDocs/pictures"
+
   def showQuitButton(self):
     """Swype handles window closing"""
     return False
