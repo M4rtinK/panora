@@ -1,4 +1,4 @@
-# Mieru current-platform detection
+# Panora current-platform detection
 import os
 
 DEFAULT_DEVICE_MODULE_ID = "pc"
