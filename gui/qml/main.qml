@@ -16,7 +16,9 @@ PageStackWindow {
 
     /* TODO: replace hardcoded value
     with actual status bar height */
-    property string oldImageURL: "" // current old image
+
+    property string projectName
+    property int imageCounter : 1
 
     // ** Open a page and push it in the stack
     function openFile(file) {
@@ -42,21 +44,37 @@ PageStackWindow {
     function openImageFile(path) {
         prepareForNewImage()
         panora.fileOpened(path)
-        oldImageURL = path
+        lastImageURL = path
     }
 
     function prepareForNewImage() {
         // reset capture list
-        oldImageURL=""
+        lastImageURL=""
         captureList.clear()
         comparisonPage.index = -1
+    }
+
+    function newProjectStarted(newProjectName) {
+        // should be called every time a new
+        // project is started
+        projectName = newProjectName
+        imageCounter=1
+    }
+
+    function storeImage(capturedImageUrl) {
+        // save the image to storage
+        var storagePath
+        storagePath = panora.storeImage(capturedImageUrl, projectName, imageCounter)
+        // increment the counter
+        imageCounter = imageCounter + 1
+        return storagePath
     }
 
     function openUrl(url) {
         prepareForNewImage()
         // store url downloads in pictures by default
         panora.urlOpened(url)
-        oldImageURL = url
+        lastImageURL = url
     }
 
     FileSelector {

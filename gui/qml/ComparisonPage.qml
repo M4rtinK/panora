@@ -29,11 +29,11 @@ Page {
     /** Image overlay **/
 
     Image {
-        id : oldImage
+        id : lastImage
         rotation : oView.overlayRotation
         anchors.fill : parent
         fillMode : Image.PreserveAspectFit
-        source : rootWindow.oldImageURL
+        source : rootWindow.lastImageURL
         opacity : oView.overlayOpacity
         smooth : true
         sourceSize.width : 854

@@ -211,7 +211,7 @@ class Panora(QObject):
 
   @QtCore.Slot(str, str, int, result=str)
   def storeImage(self, capturedImagePath, projectName, index):
-    newFilename = "%s_%s.jpg" % (projectName, index)
+    newFilename = "%s_%03d.jpg" % (projectName, index)
     folder = self.panora.platform.getDefaultPhotoStoragePath()
     storagePath = os.path.join(folder, newFilename)
 

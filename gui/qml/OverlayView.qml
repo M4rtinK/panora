@@ -149,23 +149,15 @@ Page {
         onImageCaptured : {
             console.log("image captured")
             if (oView.newIsOld || timersEnabled) {
-                oldImage.rotation = screen.currentOrientation == 1 ? 90 :0
-                oldImageURL = preview
+                lastImage.rotation = screen.currentOrientation == 1 ? 90 :0
+                lastImage.source = preview
             }
         }
 
         onImageSaved : {
+            rootWindow.storeImage(capturedImagePath)
+            //captureList.append({"path":storagePath})
             console.log("image saved")
-            /*
-            var storagePath
-            if (oView.newIsOld) {
-                panora.storeNewAsOld(capturedImagePath)
-                oView.newIsOld = false
-            } else {
-                storagePath = panora.storeImage(capturedImagePath)
-                captureList.append({"path":storagePath})
-            }
-            */
         }
     }
 
@@ -173,11 +165,10 @@ Page {
 
     Image {
         visible : true
-        id : oldImage
+        id : lastImage
         rotation : overlayRotation
         anchors.fill : parent
         fillMode : Image.PreserveAspectFit
-        source : rootWindow.oldImageURL
         opacity : overlayOpacity
         smooth : true
         sourceSize.width : 854
@@ -284,7 +275,7 @@ Page {
         anchors.centerIn : parent
         text : qsTr("<h2>No previous photo</h2>")
         color: "white"
-        visible : !oView.newIsOld && oldImage.source == ""
+        visible : !oView.newIsOld && lastImage.source == ""
     }
 
 

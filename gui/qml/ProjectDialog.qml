@@ -46,7 +46,10 @@ HeaderDialog {
                 iconSource : "image://theme/icon-m-toolbar-done"
                 width : pButtonRow.usableWidth/2.0
                 onClicked: {
+                    // notify the rootWindow
+                    rootWindow.newProjectStarted(nameField.text)
                     close()
+                    //TODO: select project type
                     rootWindow.pageStack.push(oView)
                 }
             }
