@@ -41,7 +41,7 @@ HeaderDialog {
 
             Button {
                 id : imageRotationB
-                text : "Done"
+                text : qsTr("Start")
                 enabled : nameField.text != ""
                 iconSource : "image://theme/icon-m-toolbar-done"
                 width : pButtonRow.usableWidth/2.0

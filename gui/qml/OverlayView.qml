@@ -157,7 +157,7 @@ Page {
         onImageSaved : {
             rootWindow.storeImage(capturedImagePath)
             //captureList.append({"path":storagePath})
-            console.log("image saved")
+            console.log("image saved to file")
         }
     }
 
