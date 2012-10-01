@@ -13,14 +13,18 @@ Page {
     tools : mainViewToolBar
 
     property bool shutterVisible : false
-    property real overlayOpacity : 0.5
+    property real overlayOpacity : 0.7
     property int overlayRotation : 0
-    property bool newIsOld : false
+    property real screenWidth : rootWindow.inPortrait ? rootWindow.height : rootWindow.width
 
+    // timers
     property int timedCaptureCount : 0
     property int timedCaptureInterval : 10
     property int sElapsed : 0
     property bool timersEnabled : false
+
+
+
 
     Connections {
         target : platformWindow
@@ -148,10 +152,8 @@ Page {
 
         onImageCaptured : {
             console.log("image captured")
-            if (oView.newIsOld || timersEnabled) {
-                lastImage.rotation = screen.currentOrientation == 1 ? 90 :0
-                lastImage.source = preview
-            }
+            lastImage.rotation = screen.currentOrientation == 1 ? 90 :0
+            lastImage.source = preview
         }
 
         onImageSaved : {
@@ -167,19 +169,22 @@ Page {
         visible : true
         id : lastImage
         rotation : overlayRotation
-        anchors.fill : parent
+        anchors.top : camera.top
+        anchors.bottom : camera.bottom
+        x : -screenWidth/2.0
         fillMode : Image.PreserveAspectFit
         opacity : overlayOpacity
         smooth : true
         sourceSize.width : 854
         sourceSize.height : 480
+        /*
         onStatusChanged : {
             if (status == Image.Ready) {
                 oView.state = "imageCapture"
             } else {
                 oView.state = "noImage"
             }
-        }
+        }*/
     }
 
     /** Toolbar **/
@@ -275,7 +280,7 @@ Page {
         anchors.centerIn : parent
         text : qsTr("<h2>No previous photo</h2>")
         color: "white"
-        visible : !oView.newIsOld && lastImage.source == ""
+        visible : lastImage.source == ""
     }
 
 
