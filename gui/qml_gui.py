@@ -217,6 +217,7 @@ class Panora(QObject):
 
     shutil.move(capturedImagePath, storagePath)
     self.gui._notify("Saved as:<br><b>%s</b>" % newFilename)
+    print(storagePath)
     return storagePath
 
     #    list = glob.glob(os.path.join(self.currentFolder,"%s*" % newFilename))

@@ -112,8 +112,6 @@ PageStackWindow {
         id : oView
     }
 
-
-
     // ** trigger notifications
     function notify(text) {
         notification.text = text;

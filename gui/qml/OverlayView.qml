@@ -177,14 +177,14 @@ Page {
         smooth : true
         sourceSize.width : 854
         sourceSize.height : 480
-        /*
-        onStatusChanged : {
-            if (status == Image.Ready) {
-                oView.state = "imageCapture"
-            } else {
-                oView.state = "noImage"
-            }
-        }*/
+    }
+
+    // clear lastImage when new project is opened
+    Connections {
+        target : rootWindow
+        onProjectNameChanged : {
+            lastImage.source = ""
+        }
     }
 
     /** Toolbar **/

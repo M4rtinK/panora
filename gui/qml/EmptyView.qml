@@ -33,6 +33,14 @@ Page {
     MainMenu {
         id : mainViewMenu
     }
+
+
+    /*
+    Component.onCompleted : {
+        mainViewMenu.open()
+    }
+    */
+
     /** No pages loaded label **/
 
     Label {
