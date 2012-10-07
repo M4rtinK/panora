@@ -90,7 +90,7 @@ Page {
                     anchors.top : ppFlattrRow.bottom
                     anchors.topMargin : 24
                     anchors.horizontalCenter : parent.horizontalCenter
-                    url : "1PPnoD4SyeQYgvhJ6L5xkjZ4qE4WMMCe1k"
+                    url : "1Aajmyd6CgJRwr1xNWhMA4W3UThzvBoMfj"
                 }
                 Column {
                     anchors.top : bitcoinButton.bottom
