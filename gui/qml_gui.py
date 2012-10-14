@@ -238,7 +238,7 @@ class Panora(QObject):
   @QtCore.Slot(result=str)
   def getProjectName(self):
     """get a usable project name - the last used one or the default string"""
-    lastName = self.panora.get('lastProjectName', 'panora_project')
+    lastName = self.panora.get('projectName', 'panora_project')
     return self.checkProjectName(lastName)
 
   @QtCore.Slot(str, result=str)
@@ -249,10 +249,7 @@ class Panora(QObject):
     storagePath = self.panora.platform.getDefaultPhotoStoragePath()
 
     filename = "%s_001.jpg" % projectName
-    if not os.path.exists(os.path.join(storagePath, filename)):
-      # project name not yet used - use it directly
-      return projectName
-    else:
+    if os.path.exists(os.path.join(storagePath, filename)):
       # find a free numeric suffix
       #TODO: a more efficient method ?
       # globbing the name & sorting the result ?
@@ -262,12 +259,16 @@ class Panora(QObject):
           usableIndex = index
           break
       if usableIndex:
-        return "%s_%03d" % (projectName, usableIndex)
+        projectName = "%s_%03d" % (projectName, usableIndex)
       else:
         # for some reason there already 999 projects with this name
         # -> use the epoch as a fallback
         epochString = "%d" % time.time()
-        return "%s_%s" % epochString
+        projectName = "%s_%s" % epochString
+    # save the project name
+    self.panora.set('projectName', projectName)
+    # return the result
+    return projectName
 
   @QtCore.Slot(result=str)
   def getSavedFilePath(self):
