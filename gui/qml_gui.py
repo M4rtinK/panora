@@ -265,8 +265,6 @@ class Panora(QObject):
         # -> use the epoch as a fallback
         epochString = "%d" % time.time()
         projectName = "%s_%s" % epochString
-    # save the project name
-    self.panora.set('projectName', projectName)
     # return the result
     return projectName
 

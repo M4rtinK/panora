@@ -57,6 +57,10 @@ PageStackWindow {
     function newProjectStarted(newProjectName) {
         // should be called every time a new
         // project is started
+
+        //save the new project name
+        options.set('projectName', newProjectName)
+
         projectName = newProjectName
         imageCounter=1
     }
